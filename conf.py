@@ -63,6 +63,7 @@ spelling_word_list_filename=['dict.txt', ]
 
 # sphinx-multiversion prep, run in each versioned source directory
 prep_commands = [
+    "make prep",
 ]
 
 # inlcude only the branches matching master and sdran-*
