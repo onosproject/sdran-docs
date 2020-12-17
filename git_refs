@@ -1,0 +1,14 @@
+# git_refs
+#
+# This file contains a list of repos, paths within those repos, and git
+# references (branch/tag/commit hash) that are checked out with `git checkout
+# <ref>` during creation of documentation.
+#
+# - First column is the git repo name
+# - Second column is the subdirectory of the repo to symlink into the
+#   docs directory
+# - Third column is the reference (branch/tag/commit) to checkout
+
+_REPO NAME_             _DIR_    _REF_
+
+sdran-in-a-box          /        master

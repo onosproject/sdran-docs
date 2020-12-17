@@ -101,6 +101,8 @@ exclude_patterns = [
         '_build',
         'venv_docs',
         'requirements.txt',
+        'repos',
+        '*/CODE_OF_CONDUCT.md',
 ]
 
 # The name of the Pygments (syntax highlighting) style to use.
