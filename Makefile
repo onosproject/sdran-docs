@@ -10,12 +10,12 @@ SOURCEDIR    ?= .
 BUILDDIR     ?= _build
 
 # name of python virtualenv that is used to run commands
-VENV_NAME      := venv_docs
+VIRTUALENV   := python3 -m venv
+VENV_NAME    := venv_docs
 
 # Other repos with documentation to include.
 # edit the `git_refs` file with the commit/tag/branch that you want to use
 OTHER_REPO_DOCS ?=  sdran-in-a-box
-
 
 .PHONY: help test lint doc8 reload Makefile prep
 
@@ -26,7 +26,7 @@ help: $(VENV_NAME)
 
 # Create the virtualenv with all the tools installed
 $(VENV_NAME):
-	virtualenv -p python3 $(VENV_NAME) ;\
+	$(VIRTUALENV) $@ ;\
   source $@/bin/activate ;\
   pip install -r requirements.txt
 
@@ -99,7 +99,6 @@ freeze: repos
 
 # prep target - used in sphinx-multiversion to check out repos
 prep: | $(OTHER_REPO_DOCS)
-
 
 # build multiple versions
 multiversion: $(VENV_NAME) Makefile | prep $(OTHER_REPO_DOCS)

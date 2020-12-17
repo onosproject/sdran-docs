@@ -1,5 +1,10 @@
-SD-RAN
-virtualenv
-patchset
+Atomix
 Intersphinx
-
+SD-RAN
+github
+onosproject
+opencord
+patchset
+sdran
+undeployed
+virtualenv
