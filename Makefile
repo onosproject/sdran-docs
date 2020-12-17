@@ -12,6 +12,11 @@ BUILDDIR     ?= _build
 # name of python virtualenv that is used to run commands
 VENV_NAME      := venv_docs
 
+# Other repos with documentation to include.
+# edit the `git_refs` file with the commit/tag/branch that you want to use
+OTHER_REPO_DOCS ?=  sdran-in-a-box
+
+
 .PHONY: help test lint doc8 reload Makefile prep
 
 # Put it first so that "make" without argument is like "make help".
@@ -50,7 +55,51 @@ clean:
 	rm -rf $(BUILDDIR)
 
 clean-all: clean
-	rm -rf $(VENV_NAME)
+	rm -rf $(VENV_NAME) repos
+
+# checkout the repos inside repos/ dir
+repos:
+	mkdir repos
+
+# build directory paths in repos/* to perform 'git clone <repo>' into
+CHECKOUT_REPOS   = $(foreach repo,$(OTHER_REPO_DOCS),repos/$(repo))
+
+# Host holding the git server
+REPO_HOST       ?= git@github.com:onosproject
+
+# For QA patchset validation - set SKIP_CHECKOUT to the repo name and
+# pre-populate it under repos/ with the specific commit to being validated
+SKIP_CHECKOUT   ?=
+
+# clone (only if doesn't exist)
+$(CHECKOUT_REPOS): | repos
+	if [ ! -d '$@' ] ;\
+    then git clone $(REPO_HOST)/$(@F) $@ ;\
+  fi
+
+# checkout correct ref if not under test, then copy subdirectories into main
+# docs dir
+$(OTHER_REPO_DOCS): | $(CHECKOUT_REPOS)
+	if [ "$(SKIP_CHECKOUT)" != "$@" ] ;\
+    then GIT_REF=`grep '^$@ ' git_refs | awk '{print $$3}'` ;\
+    cd "repos/$@" && git checkout $$GIT_REF ;\
+  fi
+	GIT_SUBDIR=`grep '^$@ ' git_refs | awk '{print $$2}'` ;\
+  cp -r repos/$(@)$$GIT_SUBDIR $@ ;\
+
+# generate a list of git checksums suitable for updating git_refs
+freeze: repos
+	@for repo in $(OTHER_REPO_DOCS) ; do \
+  GIT_SUBDIR=`grep "^$$repo " git_refs | awk '{print $$2}'` ;\
+    cd "repos/$$repo" > /dev/null ;\
+    HEAD_SHA=`git rev-parse HEAD` ;\
+    printf "%-24s %-8s %-40s\n" $$repo $$GIT_SUBDIR $$HEAD_SHA ;\
+  cd ../.. ;\
+  done
+
+# prep target - used in sphinx-multiversion to check out repos
+prep: | $(OTHER_REPO_DOCS)
+
 
 # build multiple versions
 multiversion: $(VENV_NAME) Makefile | prep $(OTHER_REPO_DOCS)
@@ -60,6 +109,6 @@ multiversion: $(VENV_NAME) Makefile | prep $(OTHER_REPO_DOCS)
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
-%: $(VENV_NAME) Makefile | $(OTHER_REPO_DOCS) $(STATIC_DOCS)
+%: $(VENV_NAME) Makefile | $(OTHER_REPO_DOCS)
 	source $</bin/activate ; set -u ;\
   $(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)

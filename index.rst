@@ -23,7 +23,7 @@ can be found on the `ONF Wiki <https://wiki.opennetworking.org/>`_.
    :caption: Installation
 
    install
-   riab
+   sdran-in-a-box/README
 
 .. toctree::
    :maxdepth: 1
