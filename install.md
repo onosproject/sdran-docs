@@ -224,7 +224,7 @@ After the installation, go to `/etc/default/cpufrequtils` and write below:
 GOVERNOR="performance"
 ```
 
-NOTE: If the `/etc/default/cpufrequtils` file does not exist, we should make that file.
+*NOTE: If the `/etc/default/cpufrequtils` file does not exist, we should make that file.*
 
 Next, we should command below:
 ```bash
@@ -272,9 +272,10 @@ $ # Push UHD image to the USRP B210 device
 $ sudo uhd_images_downloader
 ```
 
-NOTE 1: When we cannot install `libuhd003`, we can replace it with `libuhd003.010.003`.
-NOTE 2: USRP B210 device has a power cable. We should keep that plugged in.
-If we plugged off the USRP B210 power due to whatever reasons, we should push UHD image to USRP B210 device again by using `uhd_image_downloader` command.
+*NOTE 1: When we cannot install `libuhd003`, we can replace it with `libuhd003.010.003`.*
+
+*NOTE 2: USRP B210 device has a power cable. We should keep that plugged in.*
+*If we plugged off the USRP B210 power due to whatever reasons, we should push UHD image to USRP B210 device again by using `uhd_image_downloader` command.*
 
 ### Verification of UHD driver installation and UHD image push
 In order to verify the UHD driver installation and UHD image push to the USRP B210 driver, we can use below command.
@@ -403,7 +404,7 @@ $ ./build_oai -I -w USRP --eNB --UE
 $ ./build_oai --eNB -c -w USRP
 ```
 
-NOTE: It takes really long time.
+*NOTE: It takes really long time.*
 
 ### Configure the secondary IP address on the OAI NUC
 Before run CU-CP, the NUC machine for OAI should have a secondary IP address on the Ethernet port.
@@ -413,8 +414,8 @@ The purpose of this IP address is to communicate with the other NUC machine whic
 $ sudo ip a add 192.168.251.100/24 dev eno1
 ```
 
-NOTE: The reference setup has 192.168.251.100/24 for the secondary IP address.
-However, any IP address is available as long as it is in the `192.168.251.0/24` subnet.
+*NOTE: The reference setup has 192.168.251.100/24 for the secondary IP address.*
+*However, any IP address is available as long as it is in the `192.168.251.0/24` subnet.*
 
 ### Configure CU-CP
 After that, we should copy the sample CU-CP configuration file in the HOME directory.
@@ -471,7 +472,7 @@ We should then configure the network parameters (e.g., routing rules, MTU size, 
 $ sudo apt install net-tools ethtool
 ```
 
-NOTE: Normally, those tools are already installed. If not, we can command it.
+*NOTE: Normally, those tools are already installed. If not, we can command it.*
 
 ### Configuration in AiaB NUC machine
 First, we should go to the AiaB NUC machine.
@@ -541,7 +542,7 @@ On the OAI NUC machine, we should go to `/path/to/openairinterface5g/cmake_targe
 $ sudo ./lte_build_oai/build/lte-softmodem -O ~/cu-cp.conf
 ```
 
-NOTE: We should have the `cu-cp.conf` file which we copied and configured before section.
+*NOTE: We should have the `cu-cp.conf` file which we copied and configured before section.*
 
 ### Run DU
 After CU-CP is running, we should run below command:
