@@ -1,7 +1,9 @@
 Atomix
 Intersphinx
 SD-RAN
+atomix
 github
+onos
 onosproject
 opencord
 patchset
