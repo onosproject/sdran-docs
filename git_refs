@@ -12,3 +12,13 @@
 _REPO NAME_             _DIR_    _REF_
 
 sdran-in-a-box          /        master
+onos-e2t                /        master
+onos-e2-sm              /        master
+onos-e2sub              /        master
+onos-api                /        master
+onos-ric-sdk-go         /        master
+onos-kpimon             /        master
+onos-config             /        master
+onos-topo               /        master
+onos-cli                /        master
+
