@@ -27,6 +27,21 @@ can be found on the `ONF Wiki <https://wiki.opennetworking.org/>`_.
 
 .. toctree::
    :maxdepth: 1
+   :hidden:
+   :caption: Components
+
+   onos-e2t/README
+   onos-e2-sm/README
+   onos-e2sub/README
+   onos-api/README
+   onos-ric-sdk-go/README
+   onos-kpimon/README
+   onos-config/README
+   onos-topo/README
+   onos-cli/README
+
+.. toctree::
+   :maxdepth: 1
    :caption: Releases
    :glob:
 

@@ -15,7 +15,7 @@ VENV_NAME    := venv_docs
 
 # Other repos with documentation to include.
 # edit the `git_refs` file with the commit/tag/branch that you want to use
-OTHER_REPO_DOCS ?=  sdran-in-a-box
+OTHER_REPO_DOCS ?=  sdran-in-a-box onos-e2t onos-e2-sm onos-e2sub onos-api onos-ric-sdk-go onos-kpimon onos-config onos-topo onos-cli
 
 .PHONY: help test lint doc8 reload Makefile prep
 
@@ -52,7 +52,7 @@ license: $(VENV_NAME)
 
 # clean up
 clean:
-	rm -rf $(BUILDDIR)
+	rm -rf $(BUILDDIR) $(OTHER_REPO_DOCS)
 
 clean-all: clean
 	rm -rf $(VENV_NAME) repos
@@ -82,7 +82,7 @@ $(CHECKOUT_REPOS): | repos
 $(OTHER_REPO_DOCS): | $(CHECKOUT_REPOS)
 	if [ "$(SKIP_CHECKOUT)" != "$@" ] ;\
     then GIT_REF=`grep '^$@ ' git_refs | awk '{print $$3}'` ;\
-    cd "repos/$@" && git checkout $$GIT_REF ;\
+    cd "repos/$@" && git fetch && git checkout $$GIT_REF ;\
   fi
 	GIT_SUBDIR=`grep '^$@ ' git_refs | awk '{print $$2}'` ;\
   cp -r repos/$(@)$$GIT_SUBDIR $@ ;\
