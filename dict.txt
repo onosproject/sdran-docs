@@ -69,3 +69,7 @@ yaml
 hyperthreading
 subnet
 fregmentation
+IMSI
+OPc
+MCC
+MNC

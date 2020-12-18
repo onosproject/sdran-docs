@@ -7,6 +7,13 @@ One of the NUC machines will have Aether-in-a-Box and the other will have OAI co
 
 *NOTE: In the below sections, AiaB machine will have 10.0.0.213 IP address, while OAI machine will have 10.0.0.214 machine for the eno1 interface which is to communicate with each other.*
 
+## Connectivity diagram
+The below figure depicts the connectivity. If we finish to install and configure everything, then we can get the connectivity shown in the below figure.
+
+![Fig_1_connectivity](./figures/installation-connectivity.png)
+
+*NOTE: All IP adddresses in this figure can be changed to the other addresses if we want.*
+
 ## Install Aether-in-a-Box (AiaB)
 The NUC machine for AiaB should have Ubuntu 18.04 server first. Then, follow below subsections.
 
@@ -107,7 +114,7 @@ config:
           imsiStart: "315010999912340"
           msisdnStart: "9999334455"
           count: 30
-  # oaisim values
+  # oaisim values - don't care the below section
   enb:
     mme:
       address: 127.0.0.1
@@ -548,6 +555,77 @@ $ sudo ./lte_build_oai/build/lte-softmodem -O ~/cu-cp.conf
 After CU-CP is running, we should run below command:
 ```bash
 $ sudo ./lte_build_oai/build/lte-softmodem -O ~/du.conf
+```
+
+## User Equipment (UE)
+As of now, the current OAI with AiaB setup is running over LTE Band 7.
+To communicate with this setup, we should prepare the Android smartphone which supports LTE Band 7.
+We should then insert a SIM card to the smartphone, where the SIM card should have the below IMSI, Key, and OPc values:
+
+* IMSI: `315010999912340-315010999912370`
+* Key: `465b5ce8b199b49faa5f0a2ee238a6bc`
+* OPc: `69d5c2eb2e2e624750541d3bbc692ba5`
+
+If we want to use the different IMSI number, we have to change the HSS configuration.
+In order to change SIM information in HSS, we first go to the AiaB NUC and open the `aether-in-a-box.yaml` file.
+And change this section to the appropriate number:
+```yaml
+  hss:
+    bootstrap:
+      users:
+        - apn: "internet"
+          key: "000102030405060708090a0b0c0d0e0f" # Change me
+          opc: "69d5c2eb2e2e624750541d3bbc692ba5" # Change me
+          sqn: 135
+          imsiStart: "315010999912340" # Change me
+          msisdnStart: "9999334455"
+          count: 30
+```
+
+If the new SIM information has the different PLMN ID, we should also change the PLMN ID into MME, HSS, CU-CP, and DU configuration files.
+We should find PLMN ID or MCC/MNC values and change them to the appropriate number.
+
+`aether-in-a-box.yaml`:
+```yaml
+  spgwc:
+    pfcp: true
+    multiUpfs: true
+    jsonCfgFiles:
+      subscriber_mapping.json:
+        subscriber-selection-rules:
+          - selected-user-plane-profile: "menlo"
+            keys:
+              serving-plmn:
+                mcc: 315 # Change me
+                mnc: 10 # Change me
+...
+  mme:
+    cfgFiles:
+      config.json:
+        mme:
+          logging: debug
+          mcc:
+            dig1: 3 # Change me
+            dig2: 1 # Change me
+            dig3: 5 # Change me
+          mnc:
+            dig1: 0 # Change me
+            dig2: 1 # Change me
+            dig3: 0 # Change me
+          apnlist:
+            internet: "spgwc"
+```
+
+`cu-cp.conf`:
+```text
+tracking_area_code = 1001;
+plmn_list = ( { mcc = 315; mnc = 010; mnc_length = 3; } ) // Change me
+```
+
+`du.conf`:
+```text
+tracking_area_code = 1001;
+plmn_list = ( { mcc = 315; mnc = 010; mnc_length = 3; } ) // Change me
 ```
 
 ## Issues?
