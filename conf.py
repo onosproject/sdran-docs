@@ -242,7 +242,7 @@ todo_include_todos = True
 
 # -- Options for linkcheck ---------------------------------------------------
 # The link checker strips off .md from links and then complains
-linkcheck_ignore = ['https://www.digikey.com'
+linkcheck_ignore = [r'https://www.digikey.com'
                     'https://github.com/onosproject/sdran-helm-charts',
                     'https://github.com/onosproject/onos-e2-sm',
                     'https://github.com/onosproject/onos-ric-sdk-go',
