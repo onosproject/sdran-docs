@@ -4,3 +4,12 @@ repos
 
 # subrepos
 sdran-in-a-box
+onos-e2t
+onos-e2-sm
+onos-e2sub
+onos-api
+onos-ric-sdk-go
+onos-kpimon
+onos-config
+onos-topo
+onos-cli
