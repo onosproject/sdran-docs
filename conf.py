@@ -242,7 +242,7 @@ todo_include_todos = True
 
 # -- Options for linkcheck ---------------------------------------------------
 # The link checker strips off .md from links and then complains
-linkcheck_ignore = []
+linkcheck_ignore = [r'https://www.digikey.com',]
 
 # -- options for Intersphinx extension ---------------------------------------
 
