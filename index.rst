@@ -10,12 +10,10 @@ can be found on the `ONF Wiki <https://wiki.opennetworking.org/>`_.
 .. toctree::
    :maxdepth: 1
    :caption: Overview
-   :hidden:
    :glob:
 
    introduction
    architecture
-   readme
 
 .. toctree::
    :maxdepth: 1
@@ -47,3 +45,10 @@ can be found on the `ONF Wiki <https://wiki.opennetworking.org/>`_.
 
    release_notes/*
 
+.. toctree::
+   :maxdepth: 1
+   :caption: HOWTO
+   :hidden:
+   :glob:
+
+   readme
