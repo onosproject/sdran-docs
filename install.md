@@ -7,13 +7,6 @@ One of the NUC machines will have Aether-in-a-Box and the other will have OAI co
 
 *NOTE: In the below sections, AiaB machine will have 10.0.0.213 IP address, while OAI machine will have 10.0.0.214 machine for the eno1 interface which is to communicate with each other.*
 
-## Connectivity diagram
-The below figure depicts the connectivity. If we finish to install and configure everything, then we can get the connectivity shown in the below figure.
-
-![Fig_1_connectivity](./figures/installation-connectivity.png)
-
-*NOTE: All IP adddresses in this figure can be changed to the other addresses if we want.*
-
 ## Install Aether-in-a-Box (AiaB)
 The NUC machine for AiaB should have Ubuntu 18.04 server first. Then, follow below subsections.
 
