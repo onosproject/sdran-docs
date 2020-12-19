@@ -62,5 +62,14 @@ kubernetes
 sdRAN
 virtualized
 Dragonboat
-reStructuredText
-
+AiaB
+https
+aether
+yaml
+hyperthreading
+subnet
+fregmentation
+IMSI
+OPc
+MCC
+MNC
