@@ -10,7 +10,7 @@ One NUC machine will be used to run a UE setup connected to a USRP B210. The oth
 Prepare other two machines (or Virtual Machines - VMs) to install decomposed parts the SDRAN-in-a-Box (RiaB), in one of them the RIC (ONOS-RIC) will be executed, while in the other the EPC (OMEC) will be executed - both over Kubernetes.
 **Those machines (or VMs) should be connected into the same subnet (via a switch or direct connection). In all machines install Ubuntu 18.04 server first.**
 
-*NOTE: In the below sections, we have the following IP addresses assigned: NUC-OAI-CU/DU (192.168.13.21), NUC-UE (192.168.13.22), ONOS-RIC (10.90.110.22), and EPC-OMEC (10.90.110.21).*
+*NOTE: In the below sections, we have the following IP addresses assigned: NUC-OAI-CU/DU (192.168.13.21), NUC-UE (192.168.13.22), ONOS-RIC (192.168.10.22), and EPC-OMEC (192.168.10.21).*
 
 ### Credentials
 While installing and running the RiaB components, we might have to write some credentials for (i) opencord gerrit, (ii) onosproject github, and (iii) sdran private Helm chart repository. Make sure you have this member-only credentials before starting to install RiaB.
@@ -660,7 +660,7 @@ Then, modify below parameters in the copied file `~/cu.onf.conf`:
 …
 ////////// RIC parameters:
 RIC : {
-    remote_ipv4_addr = "10.90.110.22";
+    remote_ipv4_addr = "192.168.10.22";
     remote_port = 36421;
     enabled = "yes";
 };
@@ -672,7 +672,7 @@ plmn_list = ( { mcc = 315; mnc = 010; mnc_length = 3; } )
     ////////// MME parameters:
     mme_ip_address  = (
       {
-        ipv4       = "10.90.110.21";    // *Write down EPC-CORE SDRAN-in-a-Box IP*
+        ipv4       = "192.168.10.21";    // *Write down EPC-CORE SDRAN-in-a-Box IP*
         ipv6       = "192:168:30::17";  // *Don’t care*
         active     = "yes";
         preference = "ipv4";
@@ -777,9 +777,9 @@ We should go to the the OAI-CU/DU NUC machine and change the network configurati
 ```bash
 $ sudo ethtool -K eno1 tx off rx off gro off gso off
 $ sudo route del -net 192.168.11.8/29 dev eno1 # ignore error if happened
-$ sudo route add -net 192.168.11.0/29 gw 10.90.110.21 dev eno1 # This route forwards traffic to the EPC machine 
-$ sudo route add -net 192.168.11.8/29 gw 10.90.110.21 dev eno1 # This route forwards traffic to the EPC machine 
-$ sudo route add -net 192.168.11.16/29 gw 10.90.110.21 dev eno1 # This route forwards traffic to the EPC machine 
+$ sudo route add -net 192.168.11.0/29 gw 192.168.10.21 dev eno1 # This route forwards traffic to the EPC machine 
+$ sudo route add -net 192.168.11.8/29 gw 192.168.10.21 dev eno1 # This route forwards traffic to the EPC machine 
+$ sudo route add -net 192.168.11.16/29 gw 192.168.10.21 dev eno1 # This route forwards traffic to the EPC machine 
 ```
 
 ## Run CU and DU in the OAI-CU/DU machine
@@ -1006,6 +1006,8 @@ In the OAI-CU/DU machine, the set of routes had to be configured so the traffic 
 Inside the router of the EPC-OMEC, a route had to be configured to reach the secondary IP address of OAI-CU/DU via the enb interface.
 
 And the cu.onf.conf file in the OAI-CU/DU machine had to be correctly configured using the IP addresses of the MME (EPC-CORE) and RIC machines.
+
+**Notice, in summary the routing rule and IP addresses configuration are performed so OAI-CU/DU can reach EPC-OMEC and vice-versa.**
 
 ### User Equipment (UE)
 As of now, the current OAI with RiaB setup is running over LTE Band 7.
