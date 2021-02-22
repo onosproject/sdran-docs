@@ -725,7 +725,7 @@ We should add a single routing rule and disable TCP TX/RX checksum and Generic R
 $ ROUTER_IP=$(kubectl exec -it router -- ifconfig eth0 | grep inet | awk '{print $2}' | awk -F ':' '{print $2}')
 $ ROUTER_IF=$(route -n | grep $ROUTER_IP  | awk '{print $NF}')
 $ sudo ethtool -K $ROUTER_IF gro off rx off
-$ sudo ethtool -K eno1 rx off tx on gro off gso on
+$ sudo ethtool -K eno1 rx off tx on gro off gso on  #Notice here, this is the primary interface of the EPC-OMEC machine
 $ sudo ethtool -K enb rx off tx on gro off gso on
 $ sudo route add -host 192.168.11.10 gw 192.168.13.21 dev eno1 #Defines the route to OAI-CU/DU secondary IP address
 
@@ -761,7 +761,7 @@ $ ethtool -K core-rtr tx off rx off gro off gso off
 ### Configuration in UPF
 Next, we should go to the UPF running in the RiaB NUC machine:
 ```bash
-$ kubectl exec -it upf-0 -n omec -- bash
+$ kubectl exec -it upf-0 -n riab -- bash
 ```
 
 On the UPF prompt, we should change the MTU size.
