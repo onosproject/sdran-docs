@@ -1,23 +1,64 @@
 # Hardware Installation
 
+This installation shows how to run the ONF SDRAN setup using ONOS-RIC, OMEC, and OAI CU/DU and UE components. 
+The OAI components perform connection via USRP B210 radio equipment attached to NUC machines.
+This setup can be utilized as a reference implementation of the ONOS-RIC in hardware.
+
 ## Preliminaries
 Prepare two NUC machines and each has Ubuntu 18.04 server.
-One of the NUC machines will have Aether-in-a-Box and the other will have OAI connected with the USRP B210 device.
-**Those machines should be connected into the same subnet (via a switch or direct connection).**
+One NUC machine will be used to run a UE setup connected to a USRP B210. The other NUC machine will be used to run the eNodeB OAI components (CU/DU) connected to another B210 device.
+Prepare other two machines (or Virtual Machines - VMs) to install decomposed parts the SDRAN-in-a-Box (RiaB), in one of them the RIC (ONOS-RIC) will be executed, while in the other the EPC (OMEC) will be executed - both over Kubernetes.
+**Those machines (or VMs) should be connected into the same subnet (via a switch or direct connection). In all machines install Ubuntu 18.04 server first.**
 
-*NOTE: In the below sections, AiaB machine will have 10.0.0.213 IP address, while OAI machine will have 10.0.0.214 machine for the eno1 interface which is to communicate with each other.*
+*NOTE: In the below sections, we have the following IP addresses assigned: NUC-OAI-CU/DU (192.168.13.21), NUC-UE (192.168.13.22), ONOS-RIC (192.168.10.22), and EPC-OMEC (192.168.10.21).*
 
-## Install Aether-in-a-Box (AiaB)
-The NUC machine for AiaB should have Ubuntu 18.04 server first. Then, follow below subsections.
+### Credentials
+While installing and running the RiaB components, we might have to write some credentials for (i) opencord gerrit, (ii) onosproject github, and (iii) sdran private Helm chart repository. Make sure you have this member-only credentials before starting to install RiaB.
 
-### Get AiaB source code
-To get the source code, please see: https://gerrit.opencord.org/admin/repos/aether-in-a-box.
-Since Aether-in-a-Box repository is a member-only repository, a user should log in gerrit and then check the git clone command on that web site.
+```bash
+aether-helm-chart repo is not in /users/wkim/helm-charts directory. Start to clone - it requires HTTPS key
+Cloning into '/users/wkim/helm-charts/aether-helm-charts'...
+Username for 'https://gerrit.opencord.org': <OPENCORD_GERRIT_ID>
+Password for 'https://<OPENCORD_GERRIT_ID>@gerrit.opencord.org': <OPENCORD_GERRIT_HTTPS_PASSWORD>
+remote: Total 1103 (delta 0), reused 1103 (delta 0)
+Receiving objects: 100% (1103/1103), 526.14 KiB | 5.31 MiB/s, done.
+Resolving deltas: 100% (604/604), done.
+sdran-helm-chart repo is not in /users/wkim/helm-charts directory. Start to clone - it requires Github credential
+Cloning into '/users/wkim/helm-charts/sdran-helm-charts'...
+Username for 'https://github.com': <ONOSPROJECT_GITHUB_ID>
+Password for 'https://<ONOSPROJECT_GITHUB_ID>@github.com': <ONOSPROJECT_GITHUB_PASSWORD>
+remote: Enumerating objects: 19, done.
+remote: Counting objects: 100% (19/19), done.
+remote: Compressing objects: 100% (17/17), done.
+remote: Total 2259 (delta 7), reused 3 (delta 2), pack-reused 2240
+Receiving objects: 100% (2259/2259), 559.35 KiB | 2.60 MiB/s, done.
+Resolving deltas: 100% (1558/1558), done.
 
-### Change `aether-in-a-box.yaml` file
-After downloading the source code, go to the aether-in-a-box-values.yaml file and change the file as below (we can copy and paste):
+.....
+
+helm repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com/
+"incubator" has been added to your repositories
+helm repo add cord https://charts.opencord.org
+"cord" has been added to your repositories
+Username for ONF SDRAN private chart: <SDRAN_PRIVATE_CHART_REPO_ID>
+Password for ONF SDRAN private chart: <SDRAN_PRIVATE_CHART_REPO_PASSWORD>
+"sdran" has been added to your repositories
+touch /tmp/build/milestones/helm-ready
+```
+
+
+## Install SDRAN-in-a-Box (RiaB) in the EPC-OMEC machine
+
+
+### Get the SDRAN-in-a-Box (RiaB) source code 
+To get the source code, please see: https://github.com/onosproject/sdran-in-a-box.
+Since SDRAN-in-a-Box repository is a member-only repository, a user should log in github and then check the git clone command on that web site.
+Clone the RiaB repository to the EPC-OMEC machine.
+
+### Change `sdran-in-a-box-values.yaml` file
+In the EPC-OMEC machine, after downloading the source code, in the cloned source code folder, edit the sdran-in-a-box-values.yaml file and change the file as below (we can copy and paste):
 ```yaml
-# Copyright 2019-present Open Networking Foundation
+# Copyright 2020-present Open Networking Foundation
 #
 # SPDX-License-Identifier: LicenseRef-ONF-Member-Only-1.0
 
@@ -42,7 +83,7 @@ config:
               serving-plmn:
                 mcc: 315
                 mnc: 10
-                tac: 1001
+                tac: 1
             priority: 5
             selected-access-profile:
               - access-all
@@ -50,7 +91,7 @@ config:
             selected-qos-profile: "qos-profile1"
         user-plane-profiles:
           menlo:
-            user-plane: "upf.omec.svc.cluster.local"
+            user-plane: "upf.riab.svc.cluster.local"
         apn-profiles:
           apn-internet-default:
             apn-name: "internet"
@@ -68,9 +109,8 @@ config:
             dns_primary: "8.8.8.8"
             dns_secondary: "1.1.1.1"
             mtu: 1400
-
     ueIpPool:
-      ip: 10.250.0.0
+      ip: 172.250.0.0 # if we use RiaB, Makefile script will override this value with the value defined in Makefile script.
   upf:
     name: "oaisim"
     sriov:
@@ -86,7 +126,6 @@ config:
     cfgFiles:
       config.json:
         mme:
-          logging: debug
           mcc:
             dig1: 3
             dig2: 1
@@ -103,56 +142,197 @@ config:
         - apn: "internet"
           key: "000102030405060708090a0b0c0d0e0f"
           opc: "69d5c2eb2e2e624750541d3bbc692ba5"
-          sqn: 135
-          imsiStart: "315010999912340"
-          msisdnStart: "9999334455"
+          sqn: 96
+          imsiStart: "315010206000001"
+          msisdnStart: "1122334455"
           count: 30
-  # oaisim values - don't care the below section
-  enb:
-    mme:
-      address: 127.0.0.1
+      mmes:
+        - id: 1
+          mme_identity: mme.riab.svc.cluster.local
+          mme_realm: riab.svc.cluster.local
+          isdn: "19136246000"
+          unreachability: 1
+  oai-enb-cu:
     networks:
+      f1:
+        interface: eno1 # if we use RiaB, Makefile script will automatically apply appropriate interface name
+        address: 10.128.100.100 #if we use RiaB, Makefile script will automatically apply appropriate IP address
+      s1mme:
+        interface: eno1 # if we use RiaB, Makefile script will automatically apply appropriate interface name
       s1u:
         interface: enb
-  plmn:
-    mcc: "315"
-    mnc: "010"
-    mnc_length: 2
-  ue:
-    sim:
-      msin: "4567891201"
-      api_key: "465b5ce8b199b49faa5f0a2ee238a6bc"
-      opc: "d4416644f6154936193433dd20a0ace0"
-      msisdn: "1122334456"
+  oai-enb-du:
+    mode: nfapi #or local_L1 for USRP and BasicSim
+    networks:
+      f1:
+        interface: eno1 #if we use RiaB, Makefile script will automatically apply appropriate IP address
+        address: 10.128.100.100 #if we use RiaB, Makefile script will automatically apply appropriate IP address
+      nfapi:
+        interface: eno1 #if we use RiaB, Makefile script will automatically apply appropriate IP address
+        address: 10.128.100.100 #if we use RiaB, Makefile script will automatically apply appropriate IP address
+  oai-ue:
+    networks:
+      nfapi:
+        interface: eno1 #if we use RiaB, Makefile script will automatically apply appropriate IP address
+        address: 10.128.100.100 #if we use RiaB, Makefile script will automatically apply appropriate IP address
+  onos-e2t:
+    enabled: "yes"
+    networks:
+      e2:
+        address: 127.0.0.1 # if we use RiaB, Makefile script will automatically apply appropriate interface name
+        port: 36421
+
+# for the development, we can use the custom images
+# For ONOS-RIC
+onos-topo:
+  image:
+    pullPolicy: IfNotPresent
+    repository: onosproject/onos-topo
+    tag: latest
+onos-config:
+  image:
+    pullPolicy: IfNotPresent
+    repository: onosproject/onos-config
+    tag: latest
+onos-e2t:
+  image:
+    pullPolicy: IfNotPresent
+    repository: onosproject/onos-e2t
+    tag: latest
+  servicemodels:
+  - name: e2sm_kpm
+    version: 1.0.0
+    image:
+      repository: onosproject/service-model-docker-e2sm_kpm-1.0.0
+      tag: latest
+      pullPolicy: IfNotPresent
+  - name: e2sm_ni
+    version: 1.0.0
+    image:
+      repository: onosproject/service-model-docker-e2sm_ni-1.0.0
+      tag: latest
+      pullPolicy: IfNotPresent
+onos-e2sub:
+  image:
+    pullPolicy: IfNotPresent
+    repository: onosproject/onos-e2sub
+    tag: latest
+onos-sdran-cli:
+  image:
+    pullPolicy: IfNotPresent
+    repository: onosproject/onos-sdran-cli
+    tag: latest
+onos-kpimon:
+  image:
+    pullPolicy: IfNotPresent
+    repository: onosproject/onos-kpimon
+    tag: latest
+
+# For OMEC & OAI
+images:
+  pullPolicy: IfNotPresent
+  tags:
+# For OMEC - Those images are stable image for RiaB
+# latest Aether helm chart commit ID: 3d1e936e87b4ddae784a33f036f87899e9d00b95
+#    init: docker.io/omecproject/pod-init:1.0.0
+#    depCheck: quay.io/stackanetes/kubernetes-entrypoint:v0.3.1
+    hssdb: docker.io/onosproject/riab-hssdb:v1.0.0
+    hss: docker.io/onosproject/riab-hss:v1.0.0
+    mme: docker.io/onosproject/riab-nucleus-mme:v1.0.0
+    spgwc: docker.io/onosproject/riab-spgw:v1.0.0
+    pcrf: docker.io/onosproject/riab-pcrf:v1.0.0
+    pcrfdb: docker.io/onosproject/riab-pcrfdb:v1.0.0
+    bess: docker.io/onosproject/riab-bess-upf:v1.0.0
+    pfcpiface: docker.io/onosproject/riab-pfcpiface:v1.0.0
+# For OAI
+    oaicucp: docker.io/onosproject/oai-enb-cu:latest
+    oaidu: docker.io/onosproject/oai-enb-du:latest
+    oaiue: docker.io/onosproject/oai-ue:latest
+
+# For SD-RAN Umbrella chart:
+# ONOS-KPIMON xAPP is imported in the RiaB by default
+import:
+  onos-kpimon:
+    enabled: true
+# Other ONOS-RIC micro-services
+#   onos-topo:
+#     enabled: true
+#   onos-e2t:
+#     enabled: true
+#   onos-e2sub:
+#     enabled: true
+#   onos-o1t:
+#     enabled: false
+#   onos-config:
+#     enabled: true
+#   onos-sdran-cli:
+#     enabled: true
+# ran-simulator chart is automatically imported when pushing ransim option
+#   ran-simulator:
+#     enabled: false
+#   onos-gui:
+#     enabled: false
+#   nem-monitoring:
+#     enabled: false
 ```
 
-### Build AiaB
-After changing the file `aether-in-a-box.yaml`, run the following commands:
+### Change the target /fabric in the Makefile
+
+In the cloned RiaB repository at the EPC-OMEC machine, edit the Makefile target to look like the following lines below.
+
 ```bash
-$ cd /path/to/aether-in-a-box
+$(M)/fabric: | $(M)/setup /opt/cni/bin/simpleovs /opt/cni/bin/static
+	sudo apt install -y openvswitch-switch
+	sudo ovs-vsctl --may-exist add-br br-enb-net
+	sudo ovs-vsctl --may-exist add-port br-enb-net enb -- set Interface enb type=internal
+	sudo ip addr add 192.168.11.12/29 dev enb || true
+	sudo ip link set enb up
+	sudo ethtool --offload enb tx off
+	sudo ip route replace 192.168.11.16/29 via 192.168.11.9 dev enb
+	kubectl apply -f $(RESOURCEDIR)/router.yaml
+	kubectl wait pod -n default --for=condition=Ready -l app=router --timeout=300s
+	kubectl -n default exec router ip route add $(UE_IP_POOL)/$(UE_IP_MASK) via 192.168.11.10
+	kubectl delete net-attach-def core-net
+	touch $@
+```
+
+**Notice the IP addresses configuration for the enb interface and the routing rule associated to it, those will be later explained in the case of a custom setup.**
+
+
+### Change the router networks
+
+In the cloned RiaB repository at the EPC-OMEC machine, edit the file located at path-to/sdran-in-a-box/resources/router.yaml, so the router Pod have its networks annotations to look like the lines below:
+
+```text
+…
+apiVersion: v1
+kind: Pod
+metadata:
+  name: router
+  labels:
+    app: router
+  annotations:
+    k8s.v1.cni.cncf.io/networks: '[
+            { "name": "core-net", "interface": "core-rtr", "ips": ["192.168.11.1/29"] },
+            { "name": "enb-net", "interface": "enb-rtr", "ips": ["192.168.11.9/29"] },
+            { "name": "access-net", "interface": "access-rtr", "ips": ["192.168.11.17/29"] }
+    ]'
+…
+```
+
+### Start the RiaB EPC-OMEC components
+After changing the file `sdran-in-a-box-values.yaml`, run the following commands:
+```bash
+$ cd /path/to/sdran-in-a-box
 $ sudo apt install build-essential
-$ make
-```
-
-If build is failed with this kind of message `cannot find cord/aether-helm-charts/omec/omec-control-plane directory`, please run the following commands.
-```bash
-$ cd ~
-$ mkdir cord
-$ cd cord
-$ # This is also a member-only repository.
-$ # Should check the command to clone aether-helm-chart repository here: 
-$ # https://gerrit.opencord.org/admin/repos/aether-helm-charts.
-$ git clone https://gerrit.opencord.org/aether-helm-charts
-$ # Then, make again
-$ cd ~/aether-in-a-box
-$ make
+$ make omec
 ```
 
 ### Verify whether everything is up and running
-After a while, AiaB Makefile completes to install K8s and deploy OMEC CP, OMEC UP, and an internal router.
-Once it is done, you can check with the below command in the AiaB NUC machine.
+After a while, RiaB Makefile completes to install K8s and deploy OMEC CP, OMEC UP, and an internal router.
+Once it is done, you can check with the below command in the EPC-OMEC machine.
 ```bash
-$ kubectl get po --all-namespace
+$ kubectl get pods --all-namespaces
 NAMESPACE     NAME                                          READY   STATUS    RESTARTS   AGE
 default       router                                        1/1     Running   0          19h
 kube-system   calico-kube-controllers-865c7978b5-k6f62      1/1     Running   0          19h
@@ -176,9 +356,56 @@ omec          upf-0                                         4/4     Running   0 
 ```
 If you can see the router and all OMEC PODs are running, then everything is good to go.
 
-## Install OpenAirInterface (OAI) and USRP B210
-Before we start this section, we should have the other NUC board which should have Ubuntu 18.04 server OS.
-**Also, please DO NOT connect the USRP B210 device to the NUC board yet.**
+## Install SDRAN-in-a-Box (RiaB) in the ONOS-RIC machine
+
+### Get the SDRAN-in-a-Box (RiaB) source code 
+To get the source code, please see: https://github.com/onosproject/sdran-in-a-box.
+Since SDRAN-in-a-Box repository is a member-only repository, a user should log in github and then check the git clone command on that web site.
+Clone the RiaB repository to the ONOS-RIC machine.
+
+
+### Start the RiaB ONOS-RIC components
+
+```bash
+$ cd /path/to/sdran-in-a-box
+$ sudo apt install build-essential
+$ make ric
+```
+
+### Verify whether everything is up and running
+After a while, RiaB Makefile completes to install K8s and deploy ONOS-RIC components.
+Once it is done, you can check with the below command in the ONOS-RIC machine.
+
+```bash
+NAMESPACE     NAME                                          READY   STATUS             RESTARTS   AGE
+kube-system   atomix-controller-694586d498-xmbl6            1/1     Running            0          2d17h
+kube-system   cache-storage-controller-5996c8fd45-qczpw     1/1     Running            0          2d17h
+kube-system   calico-kube-controllers-845fccd4b8-5d9pf      1/1     Running            0          2d17h
+kube-system   calico-node-pk9tq                             1/1     Running            0          2d17h
+kube-system   coredns-dff8fc7d-xphrs                        1/1     Running            0          2d17h
+kube-system   dns-autoscaler-5d74bb9b8f-8fj47               1/1     Running            0          2d17h
+kube-system   kube-apiserver-node1                          1/1     Running            0          2d17h
+kube-system   kube-controller-manager-node1                 1/1     Running            0          2d17h
+kube-system   kube-multus-ds-amd64-dn989                    1/1     Running            0          2d17h
+kube-system   kube-proxy-88wsz                              1/1     Running            0          2d17h
+kube-system   kube-scheduler-node1                          1/1     Running            0          2d17h
+kube-system   kubernetes-dashboard-667c4c65f8-9lhx4         1/1     Running            0          2d17h
+kube-system   kubernetes-metrics-scraper-54fbb4d595-tjd97   1/1     Running            0          2d17h
+kube-system   nodelocaldns-v8lnk                            1/1     Running            0          2d17h
+kube-system   raft-storage-controller-7755865dcd-wt2xt      1/1     Running            0          2d17h
+riab          onos-config-7b9686f7c-5fcdt                   1/1     Running            0          2d16h
+riab          onos-consensus-db-1-0                         1/1     Running            0          2d16h
+riab          onos-e2sub-df8c86fc7-gbb97                    1/1     Running            0          2d16h
+riab          onos-e2t-5dbfb8555c-wzfjm                     1/1     Running            0          2d16h
+riab          onos-kpimon-575947b656-k2vll                  1/1     Running            0          2d16h
+riab          onos-sdran-cli-c4dc6bfbc-24c86                1/1     Running            0          2d16h
+riab          onos-topo-69978c49fb-8cptq                    1/1     Running            0          2d16h
+```
+
+## Install OpenAirInterface (OAI) and USRP B210 in both NUC machines
+
+Before we start this section, we consider the NUC machines already have Ubuntu 18.04 server OS installed.
+**Also, please DO NOT connect the USRP B210 device to the NUC machines yet.**
 **Otherwise, NUC may not boot up.**
 Then, follow below section.
 
@@ -394,111 +621,130 @@ $ uhd_usrp_probe
 If we see the above results which shows the device name `B210`, we are good to go.
 
 ### Build OAI
+
+The OAI repository (https://github.com/onosproject/openairinterface5g) used in this tutorial requires member-only access, a user should log in github and then check the git clone command on that web site.
+
 After the USRP configuration, we should build the OAI code.
 ```bash
 $ git clone https://github.com/onosproject/openairinterface5g
-$ cd /path/to/openairinterfae5g
+$ cd /path/to/openairinterface5g
 $ source oaienv
 $ cd cmake_targets/
-$ ./build_oai -I -w USRP --eNB --UE
-$ ./build_oai --eNB -c -w USRP
+# $ ./build_oai -I -w USRP --eNB --UE 
+# $ ./build_oai --eNB -c -w USRP
+$ ./build_oai -c  --eNB --UE -w USRP -g --build-ric-agent
 ```
 
-*NOTE: It takes really long time.*
+*NOTE: It takes really long time to build OAI.*
+
 
 ### Configure the secondary IP address on the OAI NUC
 Before run CU-CP, the NUC machine for OAI should have a secondary IP address on the Ethernet port.
-The secondary IP address should have one of the IP address in `192.168.251.0/24` subnet.
-The purpose of this IP address is to communicate with the other NUC machine which AiaB is running inside.
+The secondary IP address should have one of the IP address in `192.168.11.8/29` subnet.
+The purpose of this IP address is to communicate with the other NUC machine which RiaB is running inside.
 ```bash
-$ sudo ip a add 192.168.251.100/24 dev eno1
+$ sudo ip a add 192.168.11.10/29 dev eno1
 ```
 
-*NOTE: The reference setup has 192.168.251.100/24 for the secondary IP address.*
-*However, any IP address is available as long as it is in the `192.168.251.0/24` subnet.*
+*NOTE: The reference setup has 192.168.11.10/29 for the secondary IP address.*
+*The IP addresses alocation will be further explained in the following sections below.*
 
-### Configure CU-CP
+### Configure CU-CP on the OAI NUC
 After that, we should copy the sample CU-CP configuration file in the HOME directory.
 ```bash
-$ cp /path/to/openairinterface5g/ci-scripts/conf_files/cu.band7.tm1.50PRB.conf ~/cu-cp.conf
+$ cp /path/to/openairinterface5g/ci-scripts/conf_files/cu.band7.tm1.25PRB.conf ~/cu.onf.conf
 ```
 
-Then, modify below parameters in the copied file `cu-cp.conf`:
+Then, modify below parameters in the copied file `~/cu.onf.conf`:
 ```text
-tracking_area_code = 1001;
+…
+////////// RIC parameters:
+RIC : {
+    remote_ipv4_addr = "192.168.10.22";
+    remote_port = 36421;
+    enabled = "yes";
+};
+…
+
+tracking_area_code = 1;
 plmn_list = ( { mcc = 315; mnc = 010; mnc_length = 3; } )
 …
     ////////// MME parameters:
     mme_ip_address  = (
       {
-        ipv4       = "10.0.0.213"; // *Write down Aether-in-a-Box IP*
-        ipv6       = "192:168:30::17"; // *Don’t care*
+        ipv4       = "192.168.10.21";    // *Write down EPC-CORE SDRAN-in-a-Box IP*
+        ipv6       = "192:168:30::17";  // *Don’t care*
         active     = "yes";
         preference = "ipv4";
       }
     );
 
     NETWORK_INTERFACES : {
-      ENB_INTERFACE_NAME_FOR_S1_MME = "eno1"; // Ethernet interface name of OAI NUC
-      ENB_IPV4_ADDRESS_FOR_S1_MME   = "10.0.0.214/24"; // OAI NUC IP address
-      ENB_INTERFACE_NAME_FOR_S1U    = "eno1"; // Ethernet interface name of OAI NUC
-      ENB_IPV4_ADDRESS_FOR_S1U      = "192.168.251.100/24"; // Write the secondary IP address which we set above
-      ENB_PORT_FOR_S1U              = 2152; # Don't touch here
-      ENB_IPV4_ADDRESS_FOR_X2C      = "10.0.0.214"; // OAI NUC IP address
-      ENB_PORT_FOR_X2C              = 36422; # Don't touch
+      ENB_INTERFACE_NAME_FOR_S1_MME = "eno1";             // Ethernet interface name of OAI NUC
+      ENB_IPV4_ADDRESS_FOR_S1_MME   = "192.168.13.21/16";  // OAI NUC IP address
+      ENB_INTERFACE_NAME_FOR_S1U    = "eno1";             // Ethernet interface name of OAI NUC
+      ENB_IPV4_ADDRESS_FOR_S1U      = "192.168.11.10/29";  // Write the secondary IP address which we set above
+      ENB_PORT_FOR_S1U              = 2152; # Spec 2152   # Don't touch
+      ENB_IPV4_ADDRESS_FOR_X2C      = "192.168.13.21/16";  // OAI NUC IP address
+      ENB_PORT_FOR_X2C              = 36422; # Spec 36422 # Don't touch
     };
   }
 
 ```
 
-### Configure DU
+### Configure DU on the OAI NUC
 Likewise, we should copy the sample DU configuration file in the HOME directory.
 ```bash
-$ cp /path/to/openairinterface5g/ci-scripts/conf_files/du.band7.tm1.50PRB.conf ~/du.conf
+$ cp /path/to/openairinterface5g/ci-scripts/conf_files/du.band7.tm1.25PRB.conf ~/du.onf.conf
 ```
 
-And then, we should open the copied file `du.conf` and change the blow variables:
+And then, we should open the copied file `~/du.onf.conf` and change the blow variables:
 ```text
 tracking_area_code = 1001;
 plmn_list = ( { mcc = 315; mnc = 010; mnc_length = 3; } )
 ```
 
 ## Network parameter configuration
-So far, we deployed AiaB on a NUC machine and installed/configured OAI on the other NUC machine.
-We should then configure the network parameters (e.g., routing rules, MTU size, and packet fregmentation) on both machines, AiaB router, and UPF in order to make them work together.
+So far, we deployed EPC-OMEC, ONOS-RIC, installed OAI in both NUC machines (OAI-CU/DU and OAI-UE), and configured OAI in the OAI-CU/DU machine.
 
-### Install some network tools on both NUC machines
+We should then configure the network parameters (e.g., routing rules, MTU size, and packet fregmentation) on EPC-OMEC and OAI-CU/DU machines in order to make them work together.
+
+### Install some network tools on both machines (EPC-OMEC and OAI-CU/DU)
 ```bash
 $ sudo apt install net-tools ethtool
 ```
 
 *NOTE: Normally, those tools are already installed. If not, we can command it.*
 
-### Configuration in AiaB NUC machine
-First, we should go to the AiaB NUC machine.
+
+### Configuration in EPC-OMEC machine
+First, we should go to the EPC-OMEC machine.
+
 We should add a single routing rule and disable TCP TX/RX checksum and Generic Receive Offloading (GRO) configuration.
 ```bash
 $ ROUTER_IP=$(kubectl exec -it router -- ifconfig eth0 | grep inet | awk '{print $2}' | awk -F ':' '{print $2}')
 $ ROUTER_IF=$(route -n | grep $ROUTER_IP  | awk '{print $NF}')
 $ sudo ethtool -K $ROUTER_IF gro off rx off
-$ sudo ethtool -K eno1 rx off tx on gro off gso on
+$ sudo ethtool -K eno1 rx off tx on gro off gso on  #Notice here, this is the primary interface of the EPC-OMEC machine
 $ sudo ethtool -K enb rx off tx on gro off gso on
-$ sudo route add -host 192.168.251.100 gw 10.0.0.214 dev eno1
+$ sudo route add -host 192.168.11.10 gw 192.168.13.21 dev eno1 #Defines the route to OAI-CU/DU secondary IP address
+
 ```
 
-### Configuration in AiaB internal router
-Second, we should configure network parameters in the AiaB internal router.
-In order to access the AiaB internal router, go to the AiaB NUC machine and command below:
+### Configuration in EPC-OMEC internal router
+Second, we should configure network parameters in the EPC-OMEC internal router.
+In order to access the EPC-OMEC internal router, go to the EPC-OMEC machine and command below:
+
 ```bash
 $ kubectl exec -it router -- bash
 ```
 
 On the router prompt, we initially add a routing rule and MTU size.
 Then, we should disable TX/RX checksum and GRO for all network interfaces in the router.
+
 ```bash
 $ # Add routing rule
-$ route add -host 192.168.251.5 gw 192.168.251.4 dev enb-rtr
-$ route add -host 10.0.0.214 gw 192.168.251.4 dev enb-rtr
+$ route add -host 192.168.11.10 gw 192.168.11.12 dev enb-rtr  #Defines the route to OAI-CU/DU machine via the enb interface (attached to br-enb-rtr bridge)
 
 $ # Change MTU size
 $ ifconfig core-rtr mtu 1550
@@ -513,9 +759,9 @@ $ ethtool -K core-rtr tx off rx off gro off gso off
 ```
 
 ### Configuration in UPF
-Next, we should go to the UPF running in the AiaB NUC machine:
+Next, we should go to the UPF running in the RiaB NUC machine:
 ```bash
-$ kubectl exec -it upf-0 -n omec -- bash
+$ kubectl exec -it upf-0 -n riab -- bash
 ```
 
 On the UPF prompt, we should change the MTU size.
@@ -524,34 +770,247 @@ $ ip l set mtu 1550 dev access
 $ ip l set mtu 1550 dev core
 ```
 
-### Configuration in OAI NUC machine
-Last, we should configure network configuration in the OAI NUC machine.
-We should go to the the OAI NUC machine and change the network configuration such as TX/RX checksum, GRO, and routing rules.
+### Configuration in OAI-CU/DU machine
+Last, we should configure network configuration in the OAI-CU/DU NUC machine.
+We should go to the the OAI-CU/DU NUC machine and change the network configuration such as TX/RX checksum, GRO, and routing rules.
+
 ```bash
 $ sudo ethtool -K eno1 tx off rx off gro off gso off
-$ sudo route del -net 192.168.251.0/24 dev eno 1 # ignore error if happened
-$ sudo route add -net 192.168.250.0/24 gw 10.0.0.213 dev eno1
-$ sudo route add -net 192.168.251.0/24 gw 10.0.0.213 dev eno1
-$ sudo route add -net 192.168.251.0/24 gw 10.0.0.213 dev eno1
+$ sudo route del -net 192.168.11.8/29 dev eno1 # ignore error if happened
+$ sudo route add -net 192.168.11.0/29 gw 192.168.10.21 dev eno1 # This route forwards traffic to the EPC machine 
+$ sudo route add -net 192.168.11.8/29 gw 192.168.10.21 dev eno1 # This route forwards traffic to the EPC machine 
+$ sudo route add -net 192.168.11.16/29 gw 192.168.10.21 dev eno1 # This route forwards traffic to the EPC machine 
 ```
 
-## Run CU-CP and DU
+## Run CU and DU in the OAI-CU/DU machine
+
 ### Run CU-CP
-On the OAI NUC machine, we should go to `/path/to/openairinterface5g/cmake_targets` and command below:
+On the OAI NUC machine, we should go to `/path/to/openairinterface5g/cmake_targets/ran_build/build` and run the command below:
 ```bash
-$ sudo ./lte_build_oai/build/lte-softmodem -O ~/cu-cp.conf
+ENODEB=1 sudo -E ./lte-softmodem -O ~/cu.onf.conf
 ```
-
-*NOTE: We should have the `cu-cp.conf` file which we copied and configured before section.*
 
 ### Run DU
-After CU-CP is running, we should run below command:
+After CU-CP is running, in another terminal we should go to `/path/to/openairinterface5g/cmake_targets/ran_build/build` and  run the command below:
 ```bash
-$ sudo ./lte_build_oai/build/lte-softmodem -O ~/du.conf
+while true; do ENODEB=1 sudo -E ./lte-softmodem -O ~/du.onf.conf; done
 ```
 
-## User Equipment (UE)
-As of now, the current OAI with AiaB setup is running over LTE Band 7.
+
+## Check if the OAI/CU-DU execution was correctly executed
+
+In the ONOS-RIC machine, log in the onos-cli pod, running:
+
+```bash
+$ kubectl -n riab exec -ti deployment/onos-sdran-cli -- bash
+```
+
+Once inside the onos-cli pod, check the ONOS-RIC connections and subscriptions:
+
+```bash
+$ sdran e2t list connections      #Shows the associated CU/DU connection
+$ sdran e2sub list subscriptions  #Shows the kpimon app subscrition to the CU/DU nodes
+$ sdran kpimon list numues        #Shows the list of associated UEs in the kpimon app 
+```
+
+
+## Run the User Equipment (UE) on the OAI-UE machine
+
+On the OAI NUC machine, we should go to `/path/to/openairinterface5g/cmake_targets/ran_build/build` and run the command below:
+
+Write down a file named ~/sim.conf with the following content:
+
+```text
+# List of known PLMNS
+PLMN: {
+    PLMN0: {
+           FULLNAME="Test network";
+           SHORTNAME="OAI4G";
+           MNC="01";
+           MCC="001";
+
+    };
+    PLMN1: {
+           FULLNAME="SFR France";
+           SHORTNAME="SFR";
+           MNC="10";
+           MCC="208";
+
+    };
+    PLMN2: {
+           FULLNAME="SFR France";
+           SHORTNAME="SFR";
+           MNC="11";
+           MCC="208";
+    };
+    PLMN3: {
+           FULLNAME="SFR France";
+           SHORTNAME="SFR";
+           MNC="13";
+           MCC="208";
+    };
+    PLMN4: {
+           FULLNAME="Aether";
+           SHORTNAME="Aether";
+           MNC="010";
+           MCC="315";
+    };
+    PLMN5: {
+           FULLNAME="T-Mobile USA";
+           SHORTNAME="T-Mobile";
+           MNC="280";
+           MCC="310";
+    };
+    PLMN6: {
+           FULLNAME="FICTITIOUS USA";
+           SHORTNAME="FICTITIO";
+           MNC="028";
+           MCC="310";
+    };
+    PLMN7: {
+           FULLNAME="Vodafone Italia";
+           SHORTNAME="VODAFONE";
+           MNC="10";
+           MCC="222";
+    };
+    PLMN8: {
+           FULLNAME="Vodafone Spain";
+           SHORTNAME="VODAFONE";
+           MNC="01";
+           MCC="214";
+    };
+    PLMN9: {
+           FULLNAME="Vodafone Spain";
+           SHORTNAME="VODAFONE";
+           MNC="06";
+           MCC="214";
+    };
+    PLMN10: {
+           FULLNAME="Vodafone Germ";
+           SHORTNAME="VODAFONE";
+           MNC="02";
+           MCC="262";
+    };
+    PLMN11: {
+           FULLNAME="Vodafone Germ";
+           SHORTNAME="VODAFONE";
+           MNC="04";
+           MCC="262";
+    };
+};
+
+UE0:
+{
+    USER: {
+        IMEI="356113022094149";
+        MANUFACTURER="EURECOM";
+        MODEL="LTE Android PC";
+        PIN="0000";
+    };
+
+    SIM: {
+        MSIN="206000001";
+        USIM_API_K="000102030405060708090a0b0c0d0e0f";
+        OPC=       "69d5c2eb2e2e624750541d3bbc692ba5";
+        MSISDN="1122334455";
+    };
+
+    # Home PLMN Selector with Access Technology
+    HPLMN= "315010";
+
+    # User controlled PLMN Selector with Access Technology
+    UCPLMN_LIST = ();
+
+    # Operator PLMN List
+    OPLMN_LIST = ("00101", "20810", "20811", "20813", "315010", "310280", "310028");
+
+    # Operator controlled PLMN Selector with Access Technology
+    OCPLMN_LIST = ("22210", "21401", "21406", "26202", "26204");
+
+    # Forbidden plmns
+    FPLMN_LIST = ();
+
+    # List of Equivalent HPLMNs
+#TODO: UE does not connect if set, to be fixed in the UE
+#    EHPLMN_LIST= ("20811", "20813");
+    EHPLMN_LIST= ();
+};
+
+```
+
+Then execute the command below to generate the UE settings.
+
+```bash
+../../nas_sim_tools/build/conf2uedata -c ~/sim.conf -o .
+```
+
+After that, initialize the UE process:
+
+```bash
+sudo ./lte-uesoftmodem -C 2630000000 -r 25 --ue-rxgain 120 --ue-txgain 0 --ue-max-power 0 --ue-scan-carrier --nokrnmod 1  2>&1 | tee UE.log
+```
+
+
+### Check the UE registration
+
+
+In the ONOS-RIC machine, log in the onos-cli pod, running:
+
+```bash
+$ kubectl -n riab exec -ti deployment/onos-sdran-cli -- bash
+```
+
+Once inside the onos-cli pod, check the ONOS-RIC connections and subscriptions:
+
+```bash
+$ sdran kpimon list numues        #Shows the list of associated UEs in the kpimon app 
+```
+
+In the kpimon output, there should appear 1 UE registered. It means the UE was attached to the DU/CU setup.
+
+
+## Cleaning
+
+### Reset RIC (ONOS-RIC machine)
+$ make reset-ric
+
+### Reset OMEC (EPC-OMEC machine)
+$ make reset-omec
+
+### Delete/Reset charts for RiaB
+This deletes all deployed Helm charts for SD-RAN development/test (i.e., Atomix, RIC, OAI, and OMEC). It does not delete K8s, Helm, or other software.
+```bash
+$ make reset-test
+```
+
+### Completely delete/reset RiaB (ONOS-RIC and EPC-OMEC)
+This deletes not only deployed Helm chart but also Kubernetes and Helm.
+```bash
+make clean # if we want to keep the ~/helm-charts directory - option to develop/test changed/new Helm charts
+make clean-all # if we also want to delete ~/helm-charts directory
+```
+
+
+## Custom Settings
+
+### Network Routes and IP Addresses
+
+It is important to explain the custom settings associated with the hardware setup described, in specific the network routes and IP addresses defined in the EPC-OMEC router and the OAI-CU/DU machine and the cu.onf.conf file.
+
+In the EPC-OMEC, a router Pod (running the Quagga engine) interconnects the core, enb and access networks, each one respectively in the following subnets 192.168.11.0/29, 192.168.11.8/29, and 192.168.11.16/29.
+
+Via the definition of the secondary IP address (192.168.11.10/29) in the OAI-CU/DU machine, it was possible to configure the EPC-OMEC core to forward traffic to the host 192.168.11.10 via the gateway 192.168.13.21 (the primary OAI-CU/DU IP address).
+
+In the OAI-CU/DU machine, the set of routes had to be configured so the traffic from the CU/DU be forwarded to the EPC-OMEC machine.
+
+Inside the router of the EPC-OMEC, a route had to be configured to reach the secondary IP address of OAI-CU/DU via the enb interface.
+
+And the cu.onf.conf file in the OAI-CU/DU machine had to be correctly configured using the IP addresses of the MME (EPC-CORE) and RIC machines.
+
+**Notice, in summary the routing rule and IP addresses configuration are performed so OAI-CU/DU can reach EPC-OMEC and vice-versa.**
+
+### User Equipment (UE)
+As of now, the current OAI with RiaB setup is running over LTE Band 7.
 To communicate with this setup, we should prepare the Android smartphone which supports LTE Band 7.
 We should then insert a SIM card to the smartphone, where the SIM card should have the below IMSI, Key, and OPc values:
 
@@ -560,7 +1019,7 @@ We should then insert a SIM card to the smartphone, where the SIM card should ha
 * OPc: `69d5c2eb2e2e624750541d3bbc692ba5`
 
 If we want to use the different IMSI number, we have to change the HSS configuration.
-In order to change SIM information in HSS, we first go to the AiaB NUC and open the `aether-in-a-box.yaml` file.
+In order to change SIM information in HSS, we first go to the ONOS-RIC machine and open the `sdran-in-a-box-values.yaml` file.
 And change this section to the appropriate number:
 ```yaml
   hss:
@@ -578,7 +1037,7 @@ And change this section to the appropriate number:
 If the new SIM information has the different PLMN ID, we should also change the PLMN ID into MME, HSS, CU-CP, and DU configuration files.
 We should find PLMN ID or MCC/MNC values and change them to the appropriate number.
 
-`aether-in-a-box.yaml`:
+`sdran-in-a-box-values.yaml`:
 ```yaml
   spgwc:
     pfcp: true
@@ -609,13 +1068,13 @@ We should find PLMN ID or MCC/MNC values and change them to the appropriate numb
             internet: "spgwc"
 ```
 
-`cu-cp.conf`:
+`cu.onf.conf`:
 ```text
 tracking_area_code = 1001;
 plmn_list = ( { mcc = 315; mnc = 010; mnc_length = 3; } ) // Change me
 ```
 
-`du.conf`:
+`du.onf.conf`:
 ```text
 tracking_area_code = 1001;
 plmn_list = ( { mcc = 315; mnc = 010; mnc_length = 3; } ) // Change me
