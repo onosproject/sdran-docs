@@ -168,12 +168,12 @@ config:
         interface: eno1 # if we use RiaB, Makefile script will automatically apply appropriate interface name
       s1u:
         interface: eno1
-      plmnID:
-        mcc: "315"
-        mnc: "10"
-        length: 2
-        fullName: "ONF SDRAN"
-        shortName: "SDRAN"
+    plmnID:
+      mcc: "315"
+      mnc: "010"
+      length: 3
+      fullName: "ONF SDRAN"
+      shortName: "SDRAN"
   oai-enb-du:
     enableUSRP: true
     mode: nfapi #or local_L1 for USRP and BasicSim
