@@ -17,6 +17,7 @@ Finally, while the solution can be instantiated on reference white-box hardware 
     * Performs translation of ASN.1 to/from Proto
   * Integrates with onos-e2sub for registration and for retrieval of application subscription requests; supports subscription add/delete operations
   * Integrates with applications (via SDK) to distribute incoming E2 indications and to relay outbound E2 messages
+  * Provides configuration to allow external connections from E2 nodes
 * onos-e2-sm
   * Provides Protobuf interface to E2 Service Models
   * Translates from Protobuf to/from ASN.1 UPER encoding
@@ -77,6 +78,7 @@ Finally, while the solution can be instantiated on reference white-box hardware 
   * E2 setup request and response, but not failure
   * Subscription request and response, but not failure
   * Indications of type REPORT
+* The ONOS-E2T micro-service supports remote connections from White-Box RAN hardware
 
 ### SDRAN-in-a-Box (RiaB)
 * Provides dev/test environment for SD-RAN project
@@ -162,7 +164,7 @@ helm install sd-ran sdran/sd-ran
 | onos-api | v0.7.0 |
 | onos-ric-sdk-go | v0.7.0 |
 | onos-e2-sm | v0.7.0 |
-| onos-e2t | v0.7.0 chart 1.0.1 | 
+| onos-e2t | v0.7.0 chart 1.0.1-rev1 | 
 | onos-e2sub | v0.7.0 chart 1.0.0 | 
 | onos-topo | v0.7.0 chart 1.0.0 | 
 | onos-config | v0.7.0 chart 1.0.0 |
@@ -172,6 +174,6 @@ helm install sd-ran sdran/sd-ran
 | cu-cp | v0.1.0 chart 0.1.0 |
 | oai du | v0.1.0 chart 0.1.0 |
 | oai ue | v0.1.0 chart 0.1.0 |
-| sdran-in-a box | v1.0.0 |
+| sdran-in-a-box | v1.0.0 |
 
 
