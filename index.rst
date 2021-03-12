@@ -37,6 +37,7 @@ can be found on the `ONF Wiki <https://wiki.opennetworking.org/>`_.
    onos-config/README
    onos-topo/README
    onos-cli/README
+   ran-simulator/README
 
 .. toctree::
    :maxdepth: 1
