@@ -245,6 +245,7 @@ todo_include_todos = True
 linkcheck_ignore = [r'https://www.digikey.com',
                     'https://github.com/onosproject/sdran-helm-charts',
                     'https://github.com/onosproject/onos-e2-sm',
+                    'https://github.com/onosproject/openairinterface5g',
                     'https://github.com/onosproject/onos-ric-sdk-go',
                     'https://github.com/onosproject/onos-e2t',
                     'https://github.com/onosproject/onos-e2sub',
