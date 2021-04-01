@@ -22,4 +22,5 @@ onos-config             /        master
 onos-topo               /        master
 onos-cli                /        master
 ran-simulator           /        master
+openairinterface5g      /        develop-onf
 
