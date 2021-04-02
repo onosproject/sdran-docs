@@ -1,15 +1,15 @@
 # Hardware Setups
 
 ## Table of Contents
-0. [Credentials](#credentials): explains the needed credentials for the tutorials presented in this document.
 1. [Hardware Installation](#hardware-installation): realizes a full setup with EPC/RIC/OAI components.
-2. [RIC](#ric): instructs how to run RIC only (without RanSim).
-3. [OAI - RiaB](#oai-riab): instructs how to run OAI (CU/DU/UE) using RiaB.
-4. [OAI - From Source Code](#oai-from-source-code): instructs how to compile and run OAI (CU/DU/UE) from source code.
-5. [Troubleshooting](#troubleshooting): explains how to solve common issues in the topics above.
+2. [RIC without RanSim](#ric): instructs how to run RIC only (without RanSim).
+3. [OAI and USRP Requirements](#oai-and-usrp-requirements): instructs how to install OAI/USRP requirements.
+4. [OAI - RiaB](#oai-riab): instructs how to run OAI (CU/DU/UE) using RiaB.
+5. [OAI - From Source Code](#oai-from-source-code): instructs how to compile and run OAI (CU/DU/UE) from source code.
+6. [Troubleshooting](#troubleshooting): explains how to solve common issues in the topics above.
 
 
-# Credentials
+## Credentials
 The tutorials here presented utilize the sdRan-in-a-Box (RiaB) repository, while installing and running the RiaB components, we might have to write some credentials for (i) opencord gerrit, (ii) onosproject github, and (iii) sdran private Helm chart repository. Make sure you have this member-only credentials before starting to install RiaB.
 
 ```bash
@@ -50,7 +50,6 @@ This installation shows how to run the ONF SDRAN setup using ONOS-RIC, OMEC, and
 The OAI components perform connection via USRP B210 radio equipment attached to NUC machines.
 This setup can be utilized as a reference implementation of the ONOS-RIC in hardware.
 
-## Preliminaries
 Prepare two NUC machines, each installed with a Ubuntu 18.04 server Operating System.
 One NUC machine will be used to run a UE setup connected to a USRP B210. The other NUC machine will be used to run the eNodeB OAI components (CU/DU) connected to another B210 device.
 Prepare other two machines (or Virtual Machines - VMs) to install decomposed parts the sdRan-in-a-Box (RiaB), in one of them the RIC (ONOS-RIC) will be executed, while in the other the EPC (OMEC) will be executed - both over Kubernetes.
@@ -60,13 +59,12 @@ Prepare other two machines (or Virtual Machines - VMs) to install decomposed par
 These IP addresses are assigned to the eno1 interface in each server, i.e., the interface associated with the default gateway route. In case of a custom setup with different IP addresses assigned to the VMs, make sure the IP addresses (and their subnets/masks) are properly referenced in the configurations utilized in this tutorial.*
 
 
+## Install the EPC-OMEC
 
+This section explains how to install the EPC OMEC components using RiaB in the EPC-OMEC machine.
 
-## Install SDRAN-in-a-Box (RiaB) in the EPC-OMEC machine
-
-
-### Get the SDRAN-in-a-Box (RiaB) source code 
-To get the source code, please see: https://github.com/onosproject/sdran-in-a-box.
+### Get the RiaB source code 
+To get the source code, please see: `https://github.com/onosproject/sdran-in-a-box`.
 
 Since SDRAN-in-a-Box repository is a member-only repository, a user should log in github and then check the git clone command on that web site.
 Clone the RiaB repository to the EPC-OMEC virtual machine.
@@ -432,10 +430,13 @@ omec          upf-0                                         4/4     Running   0 
 ```
 If you can see the router and all OMEC PODs are running, then everything is good to go.
 
-## Install SDRAN-in-a-Box (RiaB) in the ONOS-RIC machine
 
-### Get the SDRAN-in-a-Box (RiaB) source code 
-To get the source code, please see: https://github.com/onosproject/sdran-in-a-box.
+## Install the ONOS-RIC
+
+This section explains how to install the RIC components using RiaB in the ONOS-RIC machine.
+
+### Get the RiaB source code 
+To get the source code, please see: `https://github.com/onosproject/sdran-in-a-box`.
 Since SDRAN-in-a-Box repository is a member-only repository, a user should log in github and then check the git clone command on that web site.
 Clone the RiaB repository to the ONOS-RIC machine.
 
@@ -448,148 +449,40 @@ $ sudo apt install build-essential
 $ make ric-oai-latest
 ```
 
-
 ### Verify whether everything is up and running
 After a while, RiaB Makefile completes to install K8s and deploy ONOS-RIC components.
 Once it is done, you can check with the below command in the ONOS-RIC machine.
 
 ```bash
-NAMESPACE     NAME                                          READY   STATUS             RESTARTS   AGE
-kube-system   atomix-controller-694586d498-xmbl6            1/1     Running            0          2d17h
-kube-system   cache-storage-controller-5996c8fd45-qczpw     1/1     Running            0          2d17h
-kube-system   calico-kube-controllers-845fccd4b8-5d9pf      1/1     Running            0          2d17h
-kube-system   calico-node-pk9tq                             1/1     Running            0          2d17h
-kube-system   coredns-dff8fc7d-xphrs                        1/1     Running            0          2d17h
-kube-system   dns-autoscaler-5d74bb9b8f-8fj47               1/1     Running            0          2d17h
-kube-system   kube-apiserver-node1                          1/1     Running            0          2d17h
-kube-system   kube-controller-manager-node1                 1/1     Running            0          2d17h
-kube-system   kube-multus-ds-amd64-dn989                    1/1     Running            0          2d17h
-kube-system   kube-proxy-88wsz                              1/1     Running            0          2d17h
-kube-system   kube-scheduler-node1                          1/1     Running            0          2d17h
-kube-system   kubernetes-dashboard-667c4c65f8-9lhx4         1/1     Running            0          2d17h
-kube-system   kubernetes-metrics-scraper-54fbb4d595-tjd97   1/1     Running            0          2d17h
-kube-system   nodelocaldns-v8lnk                            1/1     Running            0          2d17h
-kube-system   raft-storage-controller-7755865dcd-wt2xt      1/1     Running            0          2d17h
-riab          onos-config-7b9686f7c-5fcdt                   1/1     Running            0          2d16h
-riab          onos-consensus-db-1-0                         1/1     Running            0          2d16h
-riab          onos-e2sub-df8c86fc7-gbb97                    1/1     Running            0          2d16h
-riab          onos-e2t-5dbfb8555c-wzfjm                     1/1     Running            0          2d16h
-riab          onos-kpimon-575947b656-k2vll                  1/1     Running            0          2d16h
-riab          onos-cli-c4dc6bfbc-24c86                      1/1     Running            0          2d16h
-riab          onos-topo-69978c49fb-8cptq                    1/1     Running            0          2d16h
+NAMESPACE     NAME                                          READY   STATUS     RESTARTS   AGE
+kube-system   atomix-controller-694586d498-6jfll            1/1     Running    0          12m
+kube-system   cache-storage-controller-5996c8fd45-5pvl4     1/1     Running    0          12m
+kube-system   calico-kube-controllers-7597dc5bf7-z9czz      1/1     Running    0          14m
+kube-system   calico-node-sd55n                             1/1     Running    0          14m
+kube-system   config-operator-69f7498fb5-6lcjw              1/1     Running    0          11m
+kube-system   coredns-dff8fc7d-mskrc                        1/1     Running    0          14m
+kube-system   dns-autoscaler-5d74bb9b8f-ql9rq               1/1     Running    0          14m
+kube-system   kube-apiserver-node1                          1/1     Running    0          13m
+kube-system   kube-controller-manager-node1                 1/1     Running    0          13m
+kube-system   kube-multus-ds-amd64-qrbcl                    1/1     Running    0          14m
+kube-system   kube-proxy-d8tgv                              1/1     Running    0          14m
+kube-system   kube-scheduler-node1                          1/1     Running    0          13m
+kube-system   kubernetes-dashboard-667c4c65f8-jdm86         1/1     Running    0          14m
+kube-system   kubernetes-metrics-scraper-54fbb4d595-8r98c   1/1     Running    0          14m
+kube-system   nodelocaldns-k5p82                            1/1     Running    0          14m
+kube-system   raft-storage-controller-7755865dcd-z68ws      1/1     Running    0          12m
+kube-system   topo-operator-558f4545bd-n8pbn                1/1     Running    0          11m
+riab          onos-cli-6655c68cb4-dzg5m                     1/1     Running    0          10m
+riab          onos-config-59884c6766-kgdwd                  2/2     Running    0          10m
+riab          onos-consensus-db-1-0                         1/1     Running    0          10m
+riab          onos-e2sub-7588dcbc7b-tvpkz                   1/1     Running    0          10m
+riab          onos-e2t-56549f6648-bbzxz                     1/1     Running    0          10m
+riab          onos-kpimon-v2-846f556cfb-nd9fs               1/1     Running    0          10m
+riab          onos-pci-85f465c9cf-gfkp2                     1/1     Running    0          10m
+riab          onos-topo-5df4cf454c-8lrcf                    1/1     Running    0          10m
 ```
-
 
 **Note: RIC does not have a fixed IP address by which oai-enb-cu (or another eNB) can communicate with it. The onos-e2t component exposes a service in port 36421, which is associated with the IP address of the eno1 interface (i.e., the default gateway interface) where it is running. To check that IP address run the command "kubectl -n riab get svc". In the output of this command, one of the lines should show something similar to "onos-e2t-external        NodePort    x.y.w.z   <none>        36421:36421/SCTP             0m40s". The IP address "x.y.w.z" shown in the output of the previous command (listed in the onos-e2t-external service) is the one that is accessible from the outside of the RIC VM, i.e., by the oai-enb-cu in case of this tutorial. In a test case with another eNB, that should be the IP address to be configured in the eNB so it can communicate with onos RIC.**
-
-
-## OAI/USRP Requirements
-
-Install the requirements for OpenAirInterface (OAI) and USRP B210 in both NUC machines.
-
-Before we start this section, we consider the NUC machines already have Ubuntu 18.04 server OS installed.
-**Also, please DO NOT connect the USRP B210 device to the NUC machines yet.**
-**Otherwise, NUC may not boot up.**
-
-Then, follow below section.
-
-### Install Linux Image low-latency
-```bash
-$ sudo apt install linux-image-lowlatency linux-headers-lowlatency
-```
-
-### Power management and CPU frequency configuration
-To run on OAI, we must disable p-state and c-state in Linux.
-Go to `/etc/default/grub` file and add change `GRUB_CMDLINE_LINUX_DEFAULT` line as below:
-```text
-GRUB_CMDLINE_LINUX_DEFAULT="quiet intel_pstate=disable processor.max_cstate=1 intel_idle.max_cstate=0 idle=poll"
-```
-
-After save that file, we should command this:
-```bash
-$ sudo update-grub2
-```
-
-Next, go to `/etc/modprobe.d/blacklist.conf` file and append below at the end of the file:
-```text
-# for OAI
-blacklist intel_powerclamp
-```
-
-After that, reboot the NUC machine. When rebooting, we have to change the `BIOS` configuration.
-Go to the BIOS setup page and change some parameters:
-* Disable secure booting option
-* Disable hyperthreading
-* Enable virtualization
-* Disable all power management functions (c-/p-state related)
-* Enable real-time tuning and Intel Turbo boost
-Once it is done, we should save and exit. Then, we reboot NUC board again.
-
-When NUC is up and running, we should install the below tool:
-```bash
-$ sudo apt-get install cpufrequtils
-```
-
-After the installation, go to `/etc/default/cpufrequtils` and write below:
-```text
-GOVERNOR="performance"
-```
-
-*NOTE: If the `/etc/default/cpufrequtils` file does not exist, we should make that file.*
-
-Next, we should command below:
-```bash
-$ sudo systemctl disable ondemand.service
-$ sudo /etc/init.d/cpufrequtils restart
-```
-
-After that, we should reboot this machine again.
-
-### Verification of the power management and CPU frequency configuration
-In order to verify configurations for the power management and CPU frequency, we should use `i7z` tool.
-```bash
-$ sudo apt install i7z
-$ sudo i7z
-True Frequency (without accounting Turbo) 1607 MHz
-  CPU Multiplier 16x || Bus clock frequency (BCLK) 100.44 MHz
-
-Socket [0] - [physical cores=6, logical cores=6, max online cores ever=6]
-  TURBO ENABLED on 6 Cores, Hyper Threading OFF
-  Max Frequency without considering Turbo 1707.44 MHz (100.44 x [17])
-  Max TURBO Multiplier (if Enabled) with 1/2/3/4/5/6 Cores is  47x/47x/41x/41x/39x/39x
-  Real Current Frequency 3058.82 MHz [100.44 x 30.45] (Max of below)
-        Core [core-id]  :Actual Freq (Mult.)      C0%   Halt(C1)%  C3 %   C6 %  Temp      VCore
-        Core 1 [0]:       3058.81 (30.45x)       100       0       0       0    64      0.9698
-        Core 2 [1]:       3058.82 (30.45x)       100       0       0       0    63      0.9698
-        Core 3 [2]:       3058.82 (30.45x)       100       0       0       0    64      0.9698
-        Core 4 [3]:       3058.81 (30.45x)       100       0       0       0    64      0.9698
-        Core 5 [4]:       3058.81 (30.45x)       100       0       0       0    65      0.9698
-        Core 6 [5]:       3058.82 (30.45x)       100       0       0       0    62      0.9686
-```
-
-In the above results, we have to see that all cores should get `C0%` as `100` and `Halt(C1)%` as `0`.
-If not, some of the above configuration are missing.
-Or, some of BIOS configurations are incorrect.
-
-**The steps above conclude the installation of OAI/USRP requirements.**
-
-**Now, please connect the USRP B210 device to the NUC machines (usb 3.0).**
-
-
-
-## OAI-CU/DU and OAI-UE RiaB Installation
-
-Please follow the instructions in case a baremetal installation is required at [OAI - From Source Code](#oai-from-source-code), it provides the guidelines to compile OAI-CU/DU/UE, and how to execute them after following the [Network Parameter Configuration](#network-parameter-configuration).
-
-Herein, the installation of the OAI-CU/CU OAI-UE NUCs will proceed using mechanisms similar to RIC and OMEC, i.e., via the Makefile of sdran-in-a-box repository.
-
-### Get the SDRAN-in-a-Box (RiaB) source code 
-To get the source code, please see: https://github.com/onosproject/sdran-in-a-box.
-
-Since SDRAN-in-a-Box repository is a member-only repository, a user should log in github and then check the git clone command on that web site.
-Clone the RiaB repository to the OAI-CU/DU and OAI-UE machines.
-
-In both the OAI-CU/DU and OAI-UE NUC machines, after downloading the source code, in the cloned source code folder, edit the sdran-in-a-box-values.yaml file and change the file as presented in [Change sdran-in-a-box-values.yaml file](#change-sdran-in-a-box-values-yaml-file).
 
 
 ## Network parameter configuration
@@ -680,7 +573,29 @@ $ sudo route add -net 192.168.11.8/29 gw 192.168.10.21 dev eno1 # This route for
 $ sudo route add -net 192.168.11.16/29 gw 192.168.10.21 dev eno1 # This route forwards traffic to the EPC machine 
 ```
 
-## Run CU and DU in the OAI-CU/DU machine
+## Install OAI-CU/DU and OAI-UE
+
+Please follow the instructions in case the need to compile [OAI - From Source Code](#oai-from-source-code), it provides the guidelines to compile OAI-CU/DU/UE, and how to execute them after following the [Network Parameter Configuration](#network-parameter-configuration).
+
+### Install OAI/USRP Requirements
+
+Install the requirements for OpenAirInterface (OAI) and USRP B210 in both NUC machines.
+Follow the instructions for installing the [OAI/USRP Requirements](#oai-and-usrp-requirements).
+
+
+### Get the RiaB source code 
+
+Herein, the installation of the OAI-CU/CU OAI-UE NUCs will proceed using mechanisms similar to RIC and OMEC, i.e., via the Makefile of sdran-in-a-box repository.
+
+To get the source code, please see: `https://github.com/onosproject/sdran-in-a-box`.
+
+Since SDRAN-in-a-Box repository is a member-only repository, a user should log in github and then check the git clone command on that web site.
+Clone the RiaB repository to the OAI-CU/DU and OAI-UE machines.
+
+In both the OAI-CU/DU and OAI-UE NUC machines, after downloading the source code, in the cloned source code folder, edit the sdran-in-a-box-values.yaml file and change the file as presented in [Change sdran-in-a-box-values.yaml file](#change-sdran-in-a-box-values-yaml-file).
+
+
+### Run CU and DU in the OAI-CU/DU machine
 
 In the OAI-CU/DU NUC machine, after cloned the RiaB repository, changed the file `sdran-in-a-box-values.yaml` (as defined by [Change sdran-in-a-box-values.yaml file](#change-sdran-in-a-box-values-yaml-file)), run the following commands:
 
@@ -696,7 +611,7 @@ After both conditions (pod/oai-enb-du-0 condition met, pod/oai-enb-cu-0 conditio
 The pod oai-enb-du-0 takes some time to start as it needs to configure the USRP first.
 
 
-## Check if the OAI/CU-DU command was correctly executed
+### Check if the OAI/CU-DU command was correctly executed
 
 In the ONOS-RIC machine, log in the onos-cli pod, running:
 
@@ -712,7 +627,7 @@ $ onos e2sub list subscriptions  #Shows the kpimon app subscrition to the CU/DU 
 $ onos kpimonv2 list metrics     #Shows the list of associated RRC UE metrics in the kpimonv2 app 
 ```
 
-## Run the User Equipment (UE) on the OAI-UE machine
+### Run the User Equipment (UE) on the OAI-UE machine
 
 After changing the file `sdran-in-a-box-values.yaml`, run the following commands:
 
@@ -727,8 +642,7 @@ After the condition (pod/oai-ue-0 condition met) were achieved proceed to the ne
 
 The pod pod/oai-ue-0 takes some time to start as it needs to configure the USRP first.
 
-### Check the UE registration
-
+## Evaluate the UE registration in RIC
 
 In the ONOS-RIC machine, log in the onos-cli pod, running:
 
@@ -751,6 +665,8 @@ Cell ID         RRC.ConnEstabAtt.sum   RRC.ConnEstabSucc.sum   RRC.ConnMax   RRC
 ```
 
 ## Cleaning
+
+This section explains how stop and clean the hardware installation.
 
 ### Reset RIC (ONOS-RIC machine)
 ```bash
@@ -876,7 +792,9 @@ plmn_list = ( { mcc = 315; mnc = 010; mnc_length = 3; } ) // Change me
 
 This section explains how to execute only the RIC components (without RanSim) using the RiaB Makefile.
 
-To get the source code, please see: https://github.com/onosproject/sdran-in-a-box.
+### Get the RiaB source code 
+
+To get the source code, please see: `https://github.com/onosproject/sdran-in-a-box`.
 
 Since SDRAN-in-a-Box repository is a member-only repository, a user should log in github and then check the git clone command on that web site.
 Clone the RiaB repository to the target machine.
@@ -884,7 +802,7 @@ Clone the RiaB repository to the target machine.
 This option is usefull to test RIC with CU/DU components running in other machines.
 
 
-## Run RIC
+### Run RIC
 
 In the sdran-in-a-box folder, edit the Makefile to disable the ran-simulator execution, it should look like the line below:
 
@@ -899,6 +817,8 @@ $ cd /path/to/sdran-in-a-box
 $ sudo apt install build-essential
 $ make ric
 ```
+
+**Notice: The sdran-in-a-box-values.yaml contain the latest versions of the RIC components. In order to use the v1.0.0 or v1.1.0 versions make sure to respectively copy and paste to the sdran-in-a-box-values.yaml file the contents of the files sdran-in-a-box-values-v1.0.0.yaml and sdran-in-a-box-values-v1.1.0.yaml as needed.**
 
 Check the deployed RIC components using the commands:
 ```bash
@@ -919,7 +839,7 @@ onos-e2t:
      nodePort: 36421
 ```
 
-## Stop/Clean RIC
+### Stop/Clean RIC
 
 This deletes all deployed Helm charts for RIC components (keeps Kubernetes and Helm installed/running).
 
@@ -935,15 +855,108 @@ make clean-all  # if we also want to delete ~/helm-charts directory
 ```
 
 
+# OAI and USRP Requirements
+
+This section explains how to install the requirements needed for the execution of an OAI component in a host machine connected to a USRP.
+
+Before we start this section, we consider the host machine already have Ubuntu 18.04 server OS installed.
+**Also, please DO NOT connect the USRP B210 device to the host machines yet.**
+**Otherwise, the host machine may not boot up.**
+
+
+### Install Linux Image low-latency
+
+```bash
+$ sudo apt install linux-image-lowlatency linux-headers-lowlatency
+```
+
+### Power management and CPU frequency configuration
+To run on OAI, we must disable p-state and c-state in Linux.
+Go to `/etc/default/grub` file and add change `GRUB_CMDLINE_LINUX_DEFAULT` line as below:
+```text
+GRUB_CMDLINE_LINUX_DEFAULT="quiet intel_pstate=disable processor.max_cstate=1 intel_idle.max_cstate=0 idle=poll"
+```
+
+After save that file, we should command this:
+```bash
+$ sudo update-grub2
+```
+
+Next, go to `/etc/modprobe.d/blacklist.conf` file and append below at the end of the file:
+```text
+# for OAI
+blacklist intel_powerclamp
+```
+
+After that, reboot the NUC machine. When rebooting, we have to change the `BIOS` configuration.
+Go to the BIOS setup page and change some parameters:
+* Disable secure booting option
+* Disable hyperthreading
+* Enable virtualization
+* Disable all power management functions (c-/p-state related)
+* Enable real-time tuning and Intel Turbo boost
+Once it is done, we should save and exit. Then, we reboot NUC board again.
+
+When NUC is up and running, we should install the below tool:
+```bash
+$ sudo apt-get install cpufrequtils
+```
+
+After the installation, go to `/etc/default/cpufrequtils` and write below:
+```text
+GOVERNOR="performance"
+```
+
+*NOTE: If the `/etc/default/cpufrequtils` file does not exist, we should make that file.*
+
+Next, we should command below:
+```bash
+$ sudo systemctl disable ondemand.service
+$ sudo /etc/init.d/cpufrequtils restart
+```
+
+After that, we should reboot this machine again.
+
+### Verification of the power management and CPU frequency configuration
+In order to verify configurations for the power management and CPU frequency, we should use `i7z` tool.
+```bash
+$ sudo apt install i7z
+$ sudo i7z
+True Frequency (without accounting Turbo) 1607 MHz
+  CPU Multiplier 16x || Bus clock frequency (BCLK) 100.44 MHz
+
+Socket [0] - [physical cores=6, logical cores=6, max online cores ever=6]
+  TURBO ENABLED on 6 Cores, Hyper Threading OFF
+  Max Frequency without considering Turbo 1707.44 MHz (100.44 x [17])
+  Max TURBO Multiplier (if Enabled) with 1/2/3/4/5/6 Cores is  47x/47x/41x/41x/39x/39x
+  Real Current Frequency 3058.82 MHz [100.44 x 30.45] (Max of below)
+        Core [core-id]  :Actual Freq (Mult.)      C0%   Halt(C1)%  C3 %   C6 %  Temp      VCore
+        Core 1 [0]:       3058.81 (30.45x)       100       0       0       0    64      0.9698
+        Core 2 [1]:       3058.82 (30.45x)       100       0       0       0    63      0.9698
+        Core 3 [2]:       3058.82 (30.45x)       100       0       0       0    64      0.9698
+        Core 4 [3]:       3058.81 (30.45x)       100       0       0       0    64      0.9698
+        Core 5 [4]:       3058.81 (30.45x)       100       0       0       0    65      0.9698
+        Core 6 [5]:       3058.82 (30.45x)       100       0       0       0    62      0.9686
+```
+
+In the above results, we have to see that all cores should get `C0%` as `100` and `Halt(C1)%` as `0`.
+If not, some of the above configuration are missing.
+Or, some of BIOS configurations are incorrect.
+
+**The steps above conclude the installation of OAI/USRP requirements.**
+
+**Now, please connect the USRP B210 device to the host machines (usb 3.0).**
+
+
 # OAI: RiaB
 
 This section explains how to execute only the OAI components using the RiaB Makefile.
 
-Bofere proceeding, make sure you follow all the instructions on how to install [OAI/USRP requirements](#oaiusrp-requirements).
+Bofere proceeding, make sure you follow all the instructions on how to install [OAI/USRP requirements](#oai-and-usrp-requirements).
 
 In the RiaB makefile targets are included options to execute OAI CU/DU/UE components using helm charts. Those steps do not require any source code compilation of OAI, the OAI components run in docker images and have their parameters configured by the sdran-in-a-box-values.yaml file.
 
-To get the source code, please see: https://github.com/onosproject/sdran-in-a-box.
+To get the source code, please see: `https://github.com/onosproject/sdran-in-a-box`.
 
 Since SDRAN-in-a-Box repository is a member-only repository, a user should log in github and then check the git clone command on that web site.
 Clone the RiaB repository to the target machine.
@@ -951,6 +964,9 @@ Clone the RiaB repository to the target machine.
 After downloading the source code, in the cloned source code folder, edit the sdran-in-a-box-values.yaml file and change the file as presented in [Change sdran-in-a-box-values.yaml file](#change-sdran-in-a-box-values-yaml-file).
 
 **Notice: The values configured in the yaml file must be changed in a custom setup. E.g., the MME IP address field.**
+
+**Notice: The sdran-in-a-box-values.yaml contain the latest versions/tags of the OAI docker images. In order to use the versions of the OAI docker images specified in RiaB v1.0.0 or v1.1.0 releases make sure to respectively copy and paste to the sdran-in-a-box-values.yaml file the contents of the files sdran-in-a-box-values-v1.0.0.yaml and sdran-in-a-box-values-v1.1.0.yaml as needed.**
+
 
 ## Run OAI eNB CU/DU 
 
@@ -997,7 +1013,9 @@ make clean-all  # if we also want to delete ~/helm-charts directory
 
 # OAI: From Source Code
 
-Bofere proceeding, make sure you follow all the instructions on how to install [OAI/USRP requirements](#oaiusrp-requirements).
+This section explains how to compile and execute only the OAI components from the source code.
+
+Bofere proceeding, make sure you follow all the instructions on how to install [OAI/USRP requirements](#oai-and-usrp-requirements).
 
 ### Install UHD driver and push UHD image to USRP B210 device
 Once we finished to check that the power management and CPU frequency configuration are good, we should reboot NUC machine again.
