@@ -59,6 +59,12 @@ Prepare other two machines (or Virtual Machines - VMs) to install decomposed par
 These IP addresses are assigned to the eno1 interface in each server, i.e., the interface associated with the default gateway route. In case of a custom setup with different IP addresses assigned to the VMs, make sure the IP addresses (and their subnets/masks) are properly referenced in the configurations utilized in this tutorial.*
 
 
+When complete, the hardware installation detains the settings shown in the following diagram:
+
+![Hardware Installation Setup - Logical View](_static/images/hw_install.png)
+
+In the diagram above are presented the 4 machines described in this setup (NUC OAI-CU/DU, NUC OAI-UE, ONOS-RIC, EPC-OMEC) interconnected via a logical layer 2 network. In each represented machine, the red squared items represent the components instantiated on them using RiaB. In particular, the EPC-OMEC machine highlights the internal structure of the omec-user-plane components, presenting how the UPF and Quagga router are interconnected via different (Open vSwitch) bridges to perform the user plane communication of the EPC.
+
 ## Install the EPC-OMEC
 
 This section explains how to install the EPC OMEC components using RiaB in the EPC-OMEC machine.
