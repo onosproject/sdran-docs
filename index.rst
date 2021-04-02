@@ -28,12 +28,14 @@ can be found on the `ONF Wiki <https://wiki.opennetworking.org/>`_.
    :hidden:
    :caption: Components
 
+   onos-api/README
+   onos-ric-sdk-go/README
+   onos-operator/README
    onos-e2t/README
    onos-e2-sm/README
    onos-e2sub/README
-   onos-api/README
-   onos-ric-sdk-go/README
    onos-kpimon/README
+   onos-pci/README
    onos-config/README
    onos-topo/README
    onos-cli/README
