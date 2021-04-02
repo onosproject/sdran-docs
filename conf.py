@@ -244,11 +244,13 @@ todo_include_todos = True
 # The link checker strips off .md from links and then complains
 linkcheck_ignore = [r'https://www.digikey.com',
                     'https://github.com/onosproject/sdran-helm-charts',
+                    'https://github.com/onosproject/onos-operator',
                     'https://github.com/onosproject/onos-e2-sm',
                     'https://github.com/onosproject/openairinterface5g',
                     'https://github.com/onosproject/onos-ric-sdk-go',
                     'https://github.com/onosproject/onos-e2t',
                     'https://github.com/onosproject/onos-e2sub',
+                    'https://github.com/onosproject/onos-pci',
                     'https://github.com/onosproject/sdran-helm-charts',
                     'http://localhost:6060/pkg/github.com/onosproject/onos-config/',
                     'https://github.com/openconfig/reference/blob/master/rpc/gnmi/gnmi-path-conventions.md#wildcards-in-paths',
