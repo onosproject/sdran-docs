@@ -1,21 +1,16 @@
-# Hardware Installation
+# Hardware Setups
 
-This installation shows how to run the ONF SDRAN setup using ONOS-RIC, OMEC, and OAI CU/DU and UE components. 
-The OAI components perform connection via USRP B210 radio equipment attached to NUC machines.
-This setup can be utilized as a reference implementation of the ONOS-RIC in hardware.
-
-## Preliminaries
-Prepare two NUC machines and each has Ubuntu 18.04 server.
-One NUC machine will be used to run a UE setup connected to a USRP B210. The other NUC machine will be used to run the eNodeB OAI components (CU/DU) connected to another B210 device.
-Prepare other two machines (or Virtual Machines - VMs) to install decomposed parts the SDRAN-in-a-Box (RiaB), in one of them the RIC (ONOS-RIC) will be executed, while in the other the EPC (OMEC) will be executed - both over Kubernetes.
-**Those machines (or VMs) should be connected into the same subnet (via a switch or direct connection). In all machines install Ubuntu 18.04 server first.**
-
-*NOTE: In the below sections, we have the following IP addresses assigned: NUC-OAI-CU/DU (192.168.13.21), NUC-UE (192.168.13.22), ONOS-RIC (192.168.10.22), and EPC-OMEC (192.168.10.21). 
-These IP addresses are assigned to the eno1 interface in each server, i.e., the interface associated with the default gateway route. In case of a custom setup with different IP addresses assigned to the VMs, make sure the IP addresses (and their subnets/masks) are properly referenced in the configurations utilized in this tutorial.*
+## Table of Contents
+0. [Credentials](#credentials): explains the needed credentials for the tutorials presented in this document.
+1. [Hardware Installation](#hardware-installation): realizes a full setup with EPC/RIC/OAI components.
+2. [RIC](#ric): instructs how to run RIC only (without RanSim).
+3. [OAI - RiaB](#oai-riab): instructs how to run OAI (CU/DU/UE) using RiaB.
+4. [OAI - From Source Code](#oai-from-source-code): instructs how to compile and run OAI (CU/DU/UE) from source code.
+5. [Troubleshooting](#troubleshooting): explains how to solve common issues in the topics above.
 
 
-### Credentials
-While installing and running the RiaB components, we might have to write some credentials for (i) opencord gerrit, (ii) onosproject github, and (iii) sdran private Helm chart repository. Make sure you have this member-only credentials before starting to install RiaB.
+# Credentials
+The tutorials here presented utilize the sdRan-in-a-Box (RiaB) repository, while installing and running the RiaB components, we might have to write some credentials for (i) opencord gerrit, (ii) onosproject github, and (iii) sdran private Helm chart repository. Make sure you have this member-only credentials before starting to install RiaB.
 
 ```bash
 aether-helm-chart repo is not in /users/wkim/helm-charts directory. Start to clone - it requires HTTPS key
@@ -49,13 +44,32 @@ touch /tmp/build/milestones/helm-ready
 ```
 
 
+# Hardware Installation
+
+This installation shows how to run the ONF SDRAN setup using ONOS-RIC, OMEC, and OAI CU/DU and UE components. 
+The OAI components perform connection via USRP B210 radio equipment attached to NUC machines.
+This setup can be utilized as a reference implementation of the ONOS-RIC in hardware.
+
+## Preliminaries
+Prepare two NUC machines, each installed with a Ubuntu 18.04 server Operating System.
+One NUC machine will be used to run a UE setup connected to a USRP B210. The other NUC machine will be used to run the eNodeB OAI components (CU/DU) connected to another B210 device.
+Prepare other two machines (or Virtual Machines - VMs) to install decomposed parts the sdRan-in-a-Box (RiaB), in one of them the RIC (ONOS-RIC) will be executed, while in the other the EPC (OMEC) will be executed - both over Kubernetes.
+**Those machines (or VMs) should be connected into the same subnet (via a switch or direct connection). In all machines install Ubuntu 18.04 server first.**
+
+*NOTE: In the below sections, we have the following IP addresses assigned: NUC-OAI-CU/DU (192.168.13.21), NUC-UE (192.168.13.22), ONOS-RIC (192.168.10.22), and EPC-OMEC (192.168.10.21).
+These IP addresses are assigned to the eno1 interface in each server, i.e., the interface associated with the default gateway route. In case of a custom setup with different IP addresses assigned to the VMs, make sure the IP addresses (and their subnets/masks) are properly referenced in the configurations utilized in this tutorial.*
+
+
+
+
 ## Install SDRAN-in-a-Box (RiaB) in the EPC-OMEC machine
 
 
 ### Get the SDRAN-in-a-Box (RiaB) source code 
 To get the source code, please see: https://github.com/onosproject/sdran-in-a-box.
+
 Since SDRAN-in-a-Box repository is a member-only repository, a user should log in github and then check the git clone command on that web site.
-Clone the RiaB repository to the EPC-OMEC machine.
+Clone the RiaB repository to the EPC-OMEC virtual machine.
 
 In the EPC-OMEC machine, after downloading the source code, in the cloned source code folder, edit the sdran-in-a-box-values.yaml file and change the file as below (we can copy and paste).
 
@@ -129,7 +143,7 @@ config:
       upf.json:
         mode: af_packet
   mme:
-    address: 192.168.10.21 # Set here the IP address of the interface eno1 (default gw) in the VM where OMEC is running
+    address: 192.168.10.21 # Set here the IP address of the interface eno1 (default gw) in the VM where OMEC is executed
     cfgFiles:
       config.json:
         mme:
@@ -199,8 +213,9 @@ config:
     enabled: "yes"
     networks:
       e2:
-        address: 192.168.10.22 # Set here the IP address of the interface eno1 (default gw) in the VM where RIC is running
+        address: 192.168.10.22 # Set here the IP address of the interface eno1 (default gw) in the VM where RIC is executed
         port: 36421
+
 # for the development, we can use the custom images
 # For ONOS-RIC
 # onos-topo:
@@ -212,7 +227,7 @@ config:
 #   image:
 #     pullPolicy: IfNotPresent
 #     repository: onosproject/onos-config
-#     tag: v0.7.8
+#     tag: latest
 onos-e2t:
   service:
     external:
@@ -223,34 +238,51 @@ onos-e2t:
 #     pullPolicy: IfNotPresent
 #     repository: onosproject/onos-e2t
 #     tag: latest
-#   servicemodels:
-#   - name: e2sm_kpm
-#     version: 1.0.0
-#     image:
-#       repository: onosproject/service-model-docker-e2sm_kpm-1.0.0
-#       tag: latest
-#       pullPolicy: IfNotPresent
-#   - name: e2sm_ni
-#     version: 1.0.0
-#     image:
-#       repository: onosproject/service-model-docker-e2sm_ni-1.0.0
-#       tag: latest
-#       pullPolicy: IfNotPresent
 # onos-e2sub:
 #   image:
 #     pullPolicy: IfNotPresent
 #     repository: onosproject/onos-e2sub
 #     tag: latest
-# onos-sdran-cli:
+# onos-cli:
 #   image:
 #     pullPolicy: IfNotPresent
-#     repository: onosproject/onos-sdran-cli
+#     repository: onosproject/onos-cli
 #     tag: latest
-# onos-kpimon:
+# ran-simulator:
+#   image:
+#     pullPolicy: IfNotPresent
+#     repository: onosproject/ran-simulator
+#     tag: latest
+# onos-kpimon-v1:
 #   image:
 #     pullPolicy: IfNotPresent
 #     repository: onosproject/onos-kpimon
 #     tag: latest
+# onos-kpimon-v2:
+#   image:
+#     pullPolicy: IfNotPresent
+#     repository: onosproject/onos-kpimon
+#     tag: latest
+# onos-pci:
+#   image:
+#     pullPolicy: IfNotPresent
+#     repository: onosproject/onos-pci
+#     tag: latest
+# fb-ah-xapp:
+#   image:
+#     repository: onosproject/fb-ah-xapp
+#     tag: 0.0.1
+#     pullPolicy: IfNotPresent
+# fb-ah-gui:
+#   image:
+#     repository: onosproject/fb-ah-gui
+#     tag: 0.0.1
+#     pullPolicy: IfNotPresent
+# ah-eson-test-server:
+#   image:
+#     repository: onosproject/ah-eson-test-server
+#     tag: 0.0.1
+#     pullPolicy: IfNotPresent
 
 # For OMEC & OAI
 images:
@@ -269,14 +301,18 @@ images:
     bess: docker.io/onosproject/riab-bess-upf:v1.0.0
     pfcpiface: docker.io/onosproject/riab-pfcpiface:v1.0.0
 # For OAI
-    oaicucp: docker.io/onosproject/oai-enb-cu:latest
-    oaidu: docker.io/onosproject/oai-enb-du:latest
-    oaiue: docker.io/onosproject/oai-ue:latest
+    oaicucp: docker.io/onosproject/oai-enb-cu:v0.1.4
+    oaidu: docker.io/onosproject/oai-enb-du:v0.1.4
+    oaiue: docker.io/onosproject/oai-ue:v0.1.4
 
 # For SD-RAN Umbrella chart:
 # ONOS-KPIMON xAPP is imported in the RiaB by default
 import:
-  onos-kpimon:
+  onos-kpimon-v1:
+    enabled: false
+  onos-kpimon-v2:
+    enabled: true
+  onos-pci:
     enabled: true
 # Other ONOS-RIC micro-services
 #   onos-topo:
@@ -289,7 +325,7 @@ import:
 #     enabled: false
 #   onos-config:
 #     enabled: true
-#   onos-sdran-cli:
+#   onos-cli:
 #     enabled: true
 # ran-simulator chart is automatically imported when pushing ransim option
 #   ran-simulator:
@@ -297,6 +333,13 @@ import:
 #   onos-gui:
 #     enabled: false
 #   nem-monitoring:
+#     enabled: false
+# fb-ah-xapp, fb-ah-gui, and ah-eson-test-server are automatically imported when pushing fbc-pci option
+#   fb-ah-xapp:
+#     enabled: false
+#   fb-ah-gui:
+#     enabled: false
+#   ah-eson-test-server:
 #     enabled: false
 ```
 
@@ -432,7 +475,7 @@ riab          onos-consensus-db-1-0                         1/1     Running     
 riab          onos-e2sub-df8c86fc7-gbb97                    1/1     Running            0          2d16h
 riab          onos-e2t-5dbfb8555c-wzfjm                     1/1     Running            0          2d16h
 riab          onos-kpimon-575947b656-k2vll                  1/1     Running            0          2d16h
-riab          onos-sdran-cli-c4dc6bfbc-24c86                1/1     Running            0          2d16h
+riab          onos-cli-c4dc6bfbc-24c86                      1/1     Running            0          2d16h
 riab          onos-topo-69978c49fb-8cptq                    1/1     Running            0          2d16h
 ```
 
@@ -440,7 +483,9 @@ riab          onos-topo-69978c49fb-8cptq                    1/1     Running     
 **Note: RIC does not have a fixed IP address by which oai-enb-cu (or another eNB) can communicate with it. The onos-e2t component exposes a service in port 36421, which is associated with the IP address of the eno1 interface (i.e., the default gateway interface) where it is running. To check that IP address run the command "kubectl -n riab get svc". In the output of this command, one of the lines should show something similar to "onos-e2t-external        NodePort    x.y.w.z   <none>        36421:36421/SCTP             0m40s". The IP address "x.y.w.z" shown in the output of the previous command (listed in the onos-e2t-external service) is the one that is accessible from the outside of the RIC VM, i.e., by the oai-enb-cu in case of this tutorial. In a test case with another eNB, that should be the IP address to be configured in the eNB so it can communicate with onos RIC.**
 
 
-## Install the requirements for OpenAirInterface (OAI) and USRP B210 in both NUC machines
+## OAI/USRP Requirements
+
+Install the requirements for OpenAirInterface (OAI) and USRP B210 in both NUC machines.
 
 Before we start this section, we consider the NUC machines already have Ubuntu 18.04 server OS installed.
 **Also, please DO NOT connect the USRP B210 device to the NUC machines yet.**
@@ -526,17 +571,21 @@ In the above results, we have to see that all cores should get `C0%` as `100` an
 If not, some of the above configuration are missing.
 Or, some of BIOS configurations are incorrect.
 
+**The steps above conclude the installation of OAI/USRP requirements.**
+
 **Now, please connect the USRP B210 device to the NUC machines (usb 3.0).**
+
 
 
 ## OAI-CU/DU and OAI-UE RiaB Installation
 
-Please follow the instructions in case a baremetal installation is required at [Baremetal Installation](#baremetal-installation), it provides the guidelines to compile OAI-CU/DU/UE, and how to execute them after following the [Network Parameter Configuration](#network-parameter-configuration).
+Please follow the instructions in case a baremetal installation is required at [OAI - From Source Code](#oai-from-source-code), it provides the guidelines to compile OAI-CU/DU/UE, and how to execute them after following the [Network Parameter Configuration](#network-parameter-configuration).
 
 Herein, the installation of the OAI-CU/CU OAI-UE NUCs will proceed using mechanisms similar to RIC and OMEC, i.e., via the Makefile of sdran-in-a-box repository.
 
 ### Get the SDRAN-in-a-Box (RiaB) source code 
 To get the source code, please see: https://github.com/onosproject/sdran-in-a-box.
+
 Since SDRAN-in-a-Box repository is a member-only repository, a user should log in github and then check the git clone command on that web site.
 Clone the RiaB repository to the OAI-CU/DU and OAI-UE machines.
 
@@ -633,7 +682,7 @@ $ sudo route add -net 192.168.11.16/29 gw 192.168.10.21 dev eno1 # This route fo
 
 ## Run CU and DU in the OAI-CU/DU machine
 
-After changing the file `sdran-in-a-box-values.yaml`, run the following commands:
+In the OAI-CU/DU NUC machine, after cloned the RiaB repository, changed the file `sdran-in-a-box-values.yaml` (as defined by [Change sdran-in-a-box-values.yaml file](#change-sdran-in-a-box-values-yaml-file)), run the following commands:
 
 ```bash
 $ cd /path/to/sdran-in-a-box
@@ -644,22 +693,23 @@ $ make oai-enb-usrp
 This step might take some time due to the download of the oai-enb-cu and oai-enb-du docker images.
 After both conditions (pod/oai-enb-du-0 condition met, pod/oai-enb-cu-0 condition met) were achieved proceed to the next topic.
 
-The pod pod/oai-enb-du-0 takes some time to start as it needs to configure the USRP first.
+The pod oai-enb-du-0 takes some time to start as it needs to configure the USRP first.
+
 
 ## Check if the OAI/CU-DU command was correctly executed
 
 In the ONOS-RIC machine, log in the onos-cli pod, running:
 
 ```bash
-$ kubectl -n riab exec -ti deployment/onos-sdran-cli -- bash
+$ kubectl -n riab exec -ti deployment/onos-cli -- bash
 ```
 
 Once inside the onos-cli pod, check the ONOS-RIC connections and subscriptions:
 
 ```bash
-$ sdran e2t list connections      #Shows the associated CU/DU connection
-$ sdran e2sub list subscriptions  #Shows the kpimon app subscrition to the CU/DU nodes
-$ sdran kpimon list numues        #Shows the list of associated UEs in the kpimon app 
+$ onos e2t list connections      #Shows the associated CU/DU connection
+$ onos e2sub list subscriptions  #Shows the kpimon app subscrition to the CU/DU nodes
+$ onos kpimonv2 list metrics     #Shows the list of associated RRC UE metrics in the kpimonv2 app 
 ```
 
 ## Run the User Equipment (UE) on the OAI-UE machine
@@ -683,28 +733,39 @@ The pod pod/oai-ue-0 takes some time to start as it needs to configure the USRP 
 In the ONOS-RIC machine, log in the onos-cli pod, running:
 
 ```bash
-$ kubectl -n riab exec -ti deployment/onos-sdran-cli -- bash
+$ kubectl -n riab exec -ti deployment/onos-cli -- bash
 ```
 
 Once inside the onos-cli pod, check the ONOS-RIC connections and subscriptions:
 
 ```bash
-$ sdran kpimon list numues        #Shows the list of associated UEs in the kpimon app 
+$ onos kpimonv2 list metrics        #Shows the list of associated RRC UE metrics in the kpimonv2 app
 ```
 
 In the kpimon output, there should appear 1 UE registered. It means the UE was attached to the DU/CU setup.
 
+```bash
+$ kubectl exec -it deployment/onos-cli -n riab -- onos kpimonv2 list metrics
+Cell ID         RRC.ConnEstabAtt.sum   RRC.ConnEstabSucc.sum   RRC.ConnMax   RRC.ConnMean   RRC.ConnReEstabAtt.sum
+1112066:57344   0                      0                       0             1              0
+```
 
 ## Cleaning
 
 ### Reset RIC (ONOS-RIC machine)
+```bash
 $ make reset-ric
+```
 
 ### Reset OMEC (EPC-OMEC machine)
+```bash
 $ make reset-omec
+```
 
 ### Reset OAI CU/DU/UE (OAI-CU/DU and OAI-UE NUC machines)
+```bash
 $ make reset-oai
+```
 
 ### Delete/Reset charts for RiaB (All machines)
 This deletes all deployed Helm charts for SD-RAN development/test (i.e., Atomix, RIC, OAI, and OMEC). It does not delete K8s, Helm, or other software.
@@ -810,13 +871,140 @@ tracking_area_code = 1001;
 plmn_list = ( { mcc = 315; mnc = 010; mnc_length = 3; } ) // Change me
 ```
 
-## Baremetal Installation
+
+# RIC
+
+This section explains how to execute only the RIC components (without RanSim) using the RiaB Makefile.
+
+To get the source code, please see: https://github.com/onosproject/sdran-in-a-box.
+
+Since SDRAN-in-a-Box repository is a member-only repository, a user should log in github and then check the git clone command on that web site.
+Clone the RiaB repository to the target machine.
+
+This option is usefull to test RIC with CU/DU components running in other machines.
+
+
+## Run RIC
+
+In the sdran-in-a-box folder, edit the Makefile to disable the ran-simulator execution, it should look like the line below:
+
+```bash
+RANSIM_ARGS			?= --set import.ran-simulator.enabled=false # Change this value from true to false
+```
+
+Then run the RIC components with the commands below.
+
+```bash
+$ cd /path/to/sdran-in-a-box
+$ sudo apt install build-essential
+$ make ric
+```
+
+Check the deployed RIC components using the commands:
+```bash
+$ kubectl -n riab get pods
+$ kubectl -n riab get svc
+```
+
+Notice, in the output of the command `kubectl -n riab get svc` the service onos-e2t-external must be present in order to  E2 nodes reach the RIC running node using a remote SCTP connection in port 36421. The IP address to be configured in E2 nodes connecting to RIC must be the IP address of the primary network interface of the RIC host machine.
+
+If such service (onos-e2t-external) does not exist, make sure in the file sdran-in-a-box-values.yaml the lines below are not commented.
+
+```yaml
+onos-e2t:
+  service:
+    external:
+      enabled: true
+    e2:
+     nodePort: 36421
+```
+
+## Stop/Clean RIC
+
+This deletes all deployed Helm charts for RIC components (keeps Kubernetes and Helm installed/running).
+
+```bash
+$ make reset-ric
+```
+
+And this deletes not only deployed Helm charts but also Kubernetes and Helm.
+
+```bash
+make clean      # if we want to keep the ~/helm-charts directory - option to develop/test changed/new Helm charts
+make clean-all  # if we also want to delete ~/helm-charts directory
+```
+
+
+# OAI: RiaB
+
+This section explains how to execute only the OAI components using the RiaB Makefile.
+
+Bofere proceeding, make sure you follow all the instructions on how to install [OAI/USRP requirements](#oaiusrp-requirements).
+
+In the RiaB makefile targets are included options to execute OAI CU/DU/UE components using helm charts. Those steps do not require any source code compilation of OAI, the OAI components run in docker images and have their parameters configured by the sdran-in-a-box-values.yaml file.
+
+To get the source code, please see: https://github.com/onosproject/sdran-in-a-box.
+
+Since SDRAN-in-a-Box repository is a member-only repository, a user should log in github and then check the git clone command on that web site.
+Clone the RiaB repository to the target machine.
+
+After downloading the source code, in the cloned source code folder, edit the sdran-in-a-box-values.yaml file and change the file as presented in [Change sdran-in-a-box-values.yaml file](#change-sdran-in-a-box-values-yaml-file).
+
+**Notice: The values configured in the yaml file must be changed in a custom setup. E.g., the MME IP address field.**
+
+## Run OAI eNB CU/DU 
+
+```bash
+$ cd /path/to/sdran-in-a-box
+$ sudo apt install build-essential
+$ make oai-enb-usrp
+```
+
+This command starts the execution of oai-enb-cu and oai-enb-du components.
+
+This step might take some time due to the download of the oai-enb-cu and oai-enb-du docker images.
+After the conditions (pod/oai-enb-cu-0 condition met and pod/oai-enb-du-0 condition met) were achieved the deployment was successful.
+
+The pod pod/oai-enb-du-0 takes some time to start as it needs to configure the USRP first.
+
+## Run OAI UE
+```bash
+$ cd /path/to/sdran-in-a-box
+$ sudo apt install build-essential
+$ make oai-ue-usrp
+```
+
+This step might take some time due to the download of the oai-ue docker image.
+After the condition (pod/oai-ue-0 condition met) were achieved proceed to the next topic.
+
+The pod pod/oai-ue-0 takes some time to start as it needs to configure the USRP first.
+
+## Stop/Clean OAI components
+
+This deletes all deployed Helm charts for OAI CU/DU/UE components.
+
+```bash
+$ make reset-oai
+```
+
+And this deletes not only deployed Helm chart but also Kubernetes and Helm.
+
+```bash
+make clean      # if we want to keep the ~/helm-charts directory - option to develop/test changed/new Helm charts
+make clean-all  # if we also want to delete ~/helm-charts directory
+```
+
+
+# OAI: From Source Code
+
+Bofere proceeding, make sure you follow all the instructions on how to install [OAI/USRP requirements](#oaiusrp-requirements).
 
 ### Install UHD driver and push UHD image to USRP B210 device
 Once we finished to check that the power management and CPU frequency configuration are good, we should reboot NUC machine again.
 After the NUC is completely rebooted, then we should connect the USRP B210 device to the NUC machine.
 To make the USRP B210 device run along with the NUC board, we should install UHD driver on the NUC machine.
 And then, we should push the UHD image to USRP B210 device.
+
 ```bash
 $ # Install UHD driver
 $ sudo apt-get install libuhd-dev libuhd003 uhd-host
@@ -955,9 +1143,7 @@ $ git clone https://github.com/onosproject/openairinterface5g
 $ cd /path/to/openairinterface5g
 $ source oaienv
 $ cd cmake_targets/
-# $ ./build_oai -I -w USRP --eNB --UE 
-# $ ./build_oai --eNB -c -w USRP
-$ ./build_oai -c  --eNB --UE -w USRP -g --build-ric-agent
+$ ./build_oai -c -I --eNB --UE -w USRP -g --build-ric-agent
 ```
 
 *NOTE: It takes really a long time to build OAI.*
@@ -1035,8 +1221,6 @@ while true; do ENODEB=1 sudo -E ./lte-softmodem -O ~/du.onf.conf; done
 ```
 
 ### Run the User Equipment (UE) on the OAI-UE machine
-
-On the OAI-UE NUC machine, we should go to `/path/to/openairinterface5g/cmake_targets/ran_build/build` and run the command below:
 
 Write down a file named ~/sim.conf with the following content:
 
@@ -1158,6 +1342,8 @@ UE0:
 
 ```
 
+On the OAI-UE NUC machine, we should go to `/path/to/openairinterface5g/cmake_targets/ran_build/build`.
+
 Then execute the command below to generate the UE settings.
 
 ```bash
@@ -1170,9 +1356,7 @@ After that, initialize the UE process:
 sudo ./lte-uesoftmodem -C 2630000000 -r 25 --ue-rxgain 120 --ue-txgain 0 --ue-max-power 0 --ue-scan-carrier --nokrnmod 1  2>&1 | tee UE.log
 ```
 
-
-
-## Troubleshooting
+# Troubleshooting
 This section covers how to solve the reported issues. This section will be updated, continuously.
 
 ### SPGW-C or UPF is not working
