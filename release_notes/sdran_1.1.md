@@ -1,4 +1,4 @@
-# SD-RAN 1.0 Release Notes
+# SD-RAN 1.1 Release Notes
 
 ## Highlights
 
