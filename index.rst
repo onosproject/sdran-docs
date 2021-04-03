@@ -18,31 +18,9 @@ can be found on the `ONF Wiki <https://wiki.opennetworking.org/>`_.
 .. toctree::
    :maxdepth: 1
    :hidden:
-   :caption: sdRan-in-a-Box
-   
-   sdran-in-a-box/README
+   :caption: Installation
 
-.. toctree::
-   :maxdepth: 1
-   :hidden:
-   :caption: Hardware Installation
-   
-   riab_hw_intro
-   riab_hw_prereq
-   riab_hw_omec
-   riab_hw_ric
-   riab_hw_oai_enb
-   riab_hw_oai_ue
-   riab_hw_ops
-   riab_hw_troubleshoot
-
-.. toctree::
-   :maxdepth: 1
-   :hidden:
-   :caption: Other Installations
-   
-   riab_hw_ric_only
-   riab_hw_oai_source
+   install_index
 
 .. toctree::
    :maxdepth: 1
