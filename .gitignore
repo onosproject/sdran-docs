@@ -1,6 +1,7 @@
 venv_docs
 _build
 repos
+.DS_Store
 
 # subrepos
 sdran-in-a-box
