@@ -166,7 +166,8 @@ Finally, RiaB can now be used in 3 different modes depending on the use case
 
 ## Deployment
 * sdran-helm-charts
-  * ONOS RIC can be installed from the helm charts as shown below:
+  * ONOS RIC can be installed from the helm charts as shown below
+  * NOTE for 1.1.1 release, use SD-RAN umbrella chart version 1.1.4 (appversion 1.1.1)
 ```bash
 # Set up onos and sdran repos
 helm repo add cord https://charts.opencord.org
@@ -183,8 +184,9 @@ helm install -n kube-system cache-storage-controller atomix/cache-storage-contro
 # Create the ONOS operator
 helm install -n kube-system onos-operator onos/onos-operator --wait
 
-# Run the sdran chart
-helm install sd-ran sdran/sd-ran
+# Run the sdran umbrella chart for the 1.1.1 release
+# for master, leave out the --version
+helm install sd-ran sdran/sd-ran --version 1.1.4
 
 # Remove sdran and its dependencies
 helm uninstall sd-ran
@@ -201,31 +203,39 @@ helm uninstall -n kube-system onos-operator atomix-controller raft-storage-contr
 
 ## Known Issues
 * KPM v2 service model logic in RAN simulator is partially implemented
-* Some new features are required in E2T and SDK to fully support Action Definition in subscription requests 
+* Some new features are required in E2T and SDK to fully support Action Definition in subscription requests;  UPDATE: fixed in SD-RAN v1.1.1
 * Decoding of unsuccessful outcome for control messages in E2AP v1.0.1 is not implemented yet
+* UPDATE: RANSim does not support granularity period in subscription requests; CU-CP does accurately report Collection Start Time in Indication Header
+
+## Release 1.1.1. Change Notes
+* Fixes to E2T, KPIMon xApp, and onos-api to populate  Action Definition (Format 1) correctly in Subscription Requests.
+* Fixes to RANSim and CU-CP to handle Subscription Requests for KPM 2.0.3 SM which include Action Definition Format 1.
+* onos-cli for the KPIMon xApp now displays multiple measurement records in a single reporting period if the granularity-period is less than the reporting period.
+* onos-pci now sends subscription requests to only those E2 nodes that support the RC-PRE ran function.
 
 
 ## Component Versions
 
-| component | version |
-| :--- | ---: |
-| onos-api | v0.7.22 |
+| component | SD-RAN 1.1.0 | SD-RAN 1.1.1 |
+| :--- | --- |  ---: |
+| sd-ran (umbrella chart) | v1.1.0 chart 1.1.0 | v1.1.1 chart 1.1.4 |
+| onos-api | v0.7.22 | v0.7.24 |
 | onos-ric-sdk-go | v0.7.11 |
 | onos-lib-go | v0.7.7 |
 | onos-e2-sm | v0.7.19 |
-| onos-e2t | v0.7.14 chart 1.0.14 | 
+| onos-e2t | v0.7.14 chart 1.0.14 | v0.7.15 chart 1.0.16 |
 | onos-e2sub | v0.7.3 chart 1.0.2 | 
 | onos-topo | v0.7.3 chart 1.0.4 | 
 | onos-config | v0.7.18 chart 1.0.13 |
 | onos-operator | v0.4.0 chart 0.4.1 |
-| ran-simulator | v0.7.24 chart 1.0.35 |
-| onos-cli | v0.7.11 chart 1.0.9 |
-| onos-kpimon | v0.1.7 chart 0.6.4 |
-| onos-pci | v0.1.2 chart 0.6.3 |
-| cu-cp | v0.1.4 chart 0.1.4 |
-| oai du | v0.1.4 chart 0.1.4 |
-| oai ue | v0.1.4 chart 0.1.4 |
-| sdran-in-a-box | v1.1.0 |
+| ran-simulator | v0.7.24 chart 1.0.35 | v0.7.26 chart 1.0.38 |
+| onos-cli | v0.7.11 chart 1.0.9 | v0.7.12 chart 1.0.11 |
+| onos-kpimon | v0.1.7 chart 0.6.4 | v0.1.8 chart v0.6.5 |
+| onos-pci | v0.1.2 chart 0.6.3 | v0.1.3 chart 0.6.4 |
+| cu-cp | v0.1.4 chart 0.1.4 | v0.1.5 chart 0.1.6 |
+| oai du | v0.1.4 chart 0.1.4 | v0.1.5 chart 0.1.6 |
+| oai ue | v0.1.4 chart 0.1.4 | v0.1.5 chart 0.1.6 |
+| sdran-in-a-box | v1.1.0 | v1.1.1 |
 | fb-ah-gui | v0.0.1 chart 0.0.1 |
 | ah-eson-test=server | v0.0.1 chart 0.0.1 |
 | fb-ah-xapp | v0.0.1 chart 0.0.1 |
