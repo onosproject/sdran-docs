@@ -104,6 +104,7 @@ exclude_patterns = [
         'requirements.txt',
         'repos',
         '*/CODE_OF_CONDUCT.md',
+        'openairinterface5g',
 ]
 
 # The name of the Pygments (syntax highlighting) style to use.
@@ -267,3 +268,13 @@ intersphinx_mapping = {
 def setup(app):
 
     app.add_css_file('css/rtd_theme_mods.css')
+
+
+def on_missing_reference(app, env, node, contnode):
+    if node['reftype'] == 'any':
+        return contnode
+    else:
+        return None
+
+def setup(app):
+    app.connect('missing-reference', on_missing_reference)
