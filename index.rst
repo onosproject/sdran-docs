@@ -39,7 +39,7 @@ can be found on the `ONF Wiki <https://wiki.opennetworking.org/>`_.
    onos-topo/README
    onos-cli/README
    ran-simulator/README
-   openairinterface5g/README
+   oai_cu_cp
 
 .. toctree::
    :maxdepth: 1
