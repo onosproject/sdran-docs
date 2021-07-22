@@ -32,11 +32,11 @@ can be found on the `ONF Wiki <https://wiki.opennetworking.org/>`_.
    onos-operator/README
    onos-e2t/README
    onos-e2-sm/README
-   onos-e2sub/README
    onos-kpimon/README
    onos-pci/README
    onos-config/README
    onos-topo/README
+   onos-uenib/README
    onos-cli/README
    ran-simulator/README
    oai_cu_cp

@@ -47,11 +47,10 @@ handling individual connections to E2T nodes in order to be able to receive E2 i
 ## Current Components
 The initial version of SD-RAN platform instantiates the above elements of the architecture as follows:
 
-* E2 Termination - implemented via `onos-e2t`
+* E2 Termination - implemented via `onos-e2t`, tracks E2 node connections and manages subscriptions
 * A1 Termination - not implemented yet
 * O1 Termination - partially implemented via `onos-config` and gNMI, rather than via NETCONF
-* E2 Subscription Management - implemented via `onos-e2sub`
-* R-NIB Service - backed by `onos-topo`
-* UE-NIB Service - initial implementation relies on apps to maintain their inventory of UEs
+* R-NIB Service - implemented by the `onos-topo` subsystem using entity/relation scheme and is extensible using information "aspects"
+* UE-NIB Service - implemented by the `onos-uenib` subsystem, supports high read/write rates and is extensible using information "aspects" 
 * Storage Facilities - backed by `atomix` and related libraries
 
