@@ -251,9 +251,14 @@ linkcheck_ignore = [r'https://www.digikey.com',
                     'https://github.com/onosproject/onos-e2t',
                     'https://github.com/onosproject/onos-e2sub',
                     'https://github.com/onosproject/onos-pci',
+                    'https://github.com/onosproject/onos-topo',
+                    'https://github.com/onosproject/onos-uenib',
                     'https://github.com/onosproject/sdran-helm-charts',
                     'http://localhost:6060/pkg/github.com/onosproject/onos-config/',
                     'https://github.com/openconfig/reference/blob/master/rpc/gnmi/gnmi-path-conventions.md#wildcards-in-paths',
+                    'https://github.com/onosproject/onos-exporter',
+                    'https://github.com/onosproject/ran-simulator',
+                    'https://github.com/OPENAIRINTERFACE/openair-cn',
                    ]
 
 # -- options for Intersphinx extension ---------------------------------------

@@ -15,13 +15,13 @@ sdran-in-a-box          /        master
 onos-operator           /        master
 onos-e2t                /        master
 onos-e2-sm              /        master
-onos-e2sub              /        master
 onos-api                /        master
 onos-ric-sdk-go         /        master
 onos-kpimon             /        master
 onos-pci                /        master
 onos-config             /        master
 onos-topo               /        master
+onos-uenib              /        master
 onos-cli                /        master
 ran-simulator           /        master
 
