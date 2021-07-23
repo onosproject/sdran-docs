@@ -24,4 +24,5 @@ onos-topo               /        master
 onos-uenib              /        master
 onos-cli                /        master
 ran-simulator           /        master
+onos-exporter           /        master
 
