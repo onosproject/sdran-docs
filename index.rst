@@ -39,6 +39,7 @@ can be found on the `ONF Wiki <https://wiki.opennetworking.org/>`_.
    onos-uenib/README
    onos-cli/README
    onos-exporter/README
+   onos-mlb/README
    ran-simulator/README
    oai_cu_cp
 
