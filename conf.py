@@ -257,6 +257,7 @@ linkcheck_ignore = [r'https://www.digikey.com',
                     'https://github.com/openconfig/reference/blob/master/rpc/gnmi/gnmi-path-conventions.md#wildcards-in-paths',
                     'https://github.com/onosproject/onos-exporter',
                     'https://github.com/onosproject/ran-simulator',
+                    'https://github.com/OPENAIRINTERFACE/openair-cn',
                    ]
 
 # -- options for Intersphinx extension ---------------------------------------
