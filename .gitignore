@@ -16,5 +16,6 @@ onos-config
 onos-topo
 onos-uenib
 onos-cli
+onos-exporter
 ran-simulator
 openairinterface5g
