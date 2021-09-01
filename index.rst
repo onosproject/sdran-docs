@@ -40,6 +40,7 @@ can be found on the `ONF Wiki <https://wiki.opennetworking.org/>`_.
    onos-cli/README
    onos-exporter/README
    onos-mlb/README
+   onos-mho/README
    ran-simulator/README
    oai_cu_cp
 
