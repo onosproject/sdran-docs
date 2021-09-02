@@ -26,3 +26,4 @@ onos-cli                /        master
 ran-simulator           /        master
 onos-exporter           /        master
 onos-mlb                /        master
+onos-mho                /        master

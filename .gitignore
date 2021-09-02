@@ -18,5 +18,6 @@ onos-uenib
 onos-cli
 onos-exporter
 onos-mlb
+onos-mho
 ran-simulator
 openairinterface5g
