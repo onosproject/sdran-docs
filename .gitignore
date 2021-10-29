@@ -19,5 +19,7 @@ onos-cli
 onos-exporter
 onos-mlb
 onos-mho
+onos-rsm
+onos-proxy
 ran-simulator
 openairinterface5g

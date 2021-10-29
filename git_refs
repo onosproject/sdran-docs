@@ -27,3 +27,6 @@ ran-simulator           /        master
 onos-exporter           /        master
 onos-mlb                /        master
 onos-mho                /        master
+onos-rsm                /        master
+onos-proxy              /        master
+

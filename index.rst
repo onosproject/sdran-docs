@@ -37,10 +37,12 @@ can be found on the `ONF Wiki <https://wiki.opennetworking.org/>`_.
    onos-config/README
    onos-topo/README
    onos-uenib/README
+   onos-proxy/README
    onos-cli/README
    onos-exporter/README
    onos-mlb/README
    onos-mho/README
+   onos-rsm/README
    ran-simulator/README
    oai_cu_cp
 
