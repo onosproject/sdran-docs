@@ -29,4 +29,7 @@ onos-mlb                /        master
 onos-mho                /        master
 onos-rsm                /        master
 onos-proxy              /        master
+onos-ric-python-apps    /        master
+onos-ric-sdk-py         /        master
+
 

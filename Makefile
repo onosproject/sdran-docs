@@ -15,7 +15,7 @@ VENV_NAME    := venv_docs
 
 # Other repos with documentation to include.
 # edit the `git_refs` file with the commit/tag/branch that you want to use
-OTHER_REPO_DOCS ?=  sdran-in-a-box onos-operator onos-e2t onos-e2-sm onos-api onos-ric-sdk-go onos-kpimon onos-pci onos-config onos-topo onos-uenib onos-cli ran-simulator onos-exporter onos-mlb onos-mho onos-rsm onos-proxy
+OTHER_REPO_DOCS ?=  sdran-in-a-box onos-operator onos-e2t onos-e2-sm onos-api onos-ric-sdk-go onos-kpimon onos-pci onos-config onos-topo onos-uenib onos-cli ran-simulator onos-exporter onos-mlb onos-mho onos-rsm onos-proxy onos-ric-python-apps onos-ric-sdk-py
 
 .PHONY: help test lint doc8 reload Makefile prep
 
