@@ -117,7 +117,7 @@ A helpful listing of the use-cases, xApps, SMs and their support in this release
   * Refactored state machine proxies and services to support concurrent reads and writes within a session
   * Fixed consistency bug allowing reads on followers to go back in time
   * Fixed a deadlock on write streams resulting from gRPC back-pressure to the state machine 
-* Python xApp SDK
+* Python xApp SDK (onos-ric-sdk-py)
   * Utilize sidecar proxy to enable client-side load balancing/optimizations
   * Remove dependency on abstract class API definitions
 * fb-kpimon-xapp
@@ -226,6 +226,7 @@ helm -n kube-system uninstall onos-operator atomix-raft-storage atomix-controlle
 |sd-ran (umbrella chart)| 1.3.0, 1.2.126 (for e2ap101) |
 | onos-api| v0.7.110 |
 | onos-ric-sdk-go | v0.7.34 |
+| onos-ric-sdk-py | v0.1.7 |
 | onos-proxy | v0.0.6 |
 | onos-lib-go | v0.7.22 |
 | onos-e2-sm | v0.7.69 |
