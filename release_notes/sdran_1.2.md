@@ -209,12 +209,12 @@ helm repo add sdran --username "$repo_user" --password "$repo_password" https://
 helm repo update
 
 # Create Atomix resources
-helm install -n kube-system atomix-controller atomix/atomix-controller --version v0.6.8 --wait
+helm install -n kube-system atomix-controller atomix/atomix-controller --version v0.6.7 --wait
 
-helm install -n kube-system raft-storage-controller atomix/atomix-raft-storage --version v0.1.14 --wait
+helm install -n kube-system raft-storage-controller atomix/atomix-raft-storage --version v0.1.8 --wait
 
 # Create the ONOS operator
-helm install -n kube-system onos-operator onos/onos-operator --version v0.4.12 --wait
+helm install -n kube-system onos-operator onos/onos-operator --version v0.4.6 --wait
 
 # Install sd-ran (not in kube-system namespace)
 kubectl create ns sdran 
