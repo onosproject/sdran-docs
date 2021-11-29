@@ -69,6 +69,9 @@ prep_commands = [
 # inlcude only the branches matching master and sdran-*
 smv_branch_whitelist = r'^(master|sdran-.*)$'
 
+# Suppress tags
+smv_tag_whitelist = None
+
 # include all remote branches
 smv_remote_whitelist = r'^.*$'
 
