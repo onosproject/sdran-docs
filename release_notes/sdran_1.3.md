@@ -200,7 +200,7 @@ helm install onos-operator onos/onos-operator -n kube-system --wait --version 0.
 
 # Install sd-ran (not in kube-system namespace)
 kubectl create ns sdran 
-helm -n sdran install sd-ran sdran/sd-ran --version 1.3
+helm -n sdran install sd-ran sdran/sd-ran --version 1.3.0
 
 # Uninstall sd-ran, atomix and onos-operator
 helm -n sdran uninstall sd-ran
