@@ -182,11 +182,11 @@ helm install -n kube-system atomix-controller atomix/atomix-controller --version
 helm install -n kube-system raft-storage-controller atomix/atomix-raft-storage --version 0.1.8 --wait
 
 # Create the ONOS operator
-helm install -n kube-system onos-operator onos/onos-operator --version 0.4.9 --wait
+helm install -n kube-system onos-operator onos/onos-operator --version 0.4.6 --wait
 
-
-# Run the sdran umbrella chart for the 1.1.1 release
-helm install sd-ran sdran/sd-ran --version 1.1.4
+# Install sd-ran (not in kube-system namespace)
+kubectl create ns sdran 
+helm -n sdran install sd-ran sdran/sd-ran --version 1.1.4
 
 # Remove sdran and its dependencies
 helm uninstall sd-ran
