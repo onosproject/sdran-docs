@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2019-present Open Networking Foundation <info@opennetworking.org>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 # Architecture
 
 SD-RAN project is based on the µONOS architecture, which is centered on micro-services and use of gRPC APIs for

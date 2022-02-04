@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2019-present Open Networking Foundation <info@opennetworking.org>
+
+SPDX-License-Identifier: Apache-2.0
+-->
+
 # OAI CU & DU #
 
 ONF's OAI CU & DU are O-RAN compliant disaggregated baseband units based on on [OpenAirInterface](http://www.openairinterface.org). The CU contains both CU-C & CU-U functionality and supports PDCP,GTPU,RRC & S1AP protocols along with S1, F1 & E2 interfaces. The DU has High-PHY(FAPI), MAC, RLC & RRC (for handing RRC Config messages from CU) protocols along with F1 interface support. Both CU & DU implements O-RAN's E2AP interface with support for the below Service Models:
