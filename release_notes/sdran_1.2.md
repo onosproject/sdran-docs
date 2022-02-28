@@ -211,7 +211,7 @@ Finally this is the first SD-RAN release fully integrated with [ONF’s Aether p
 helm repo add cord https://charts.opencord.org
 helm repo add atomix https://charts.atomix.io
 helm repo add onos https://charts.onosproject.org
-helm repo add sdran --username "$repo_user" --password "$repo_password" https://sdrancharts.onosproject.org
+helm repo add sdran https://sdrancharts.onosproject.org
 helm repo update
 
 # Create Atomix resources
@@ -224,7 +224,7 @@ helm install -n kube-system onos-operator onos/onos-operator --version v0.4.6 --
 
 # Install sd-ran (not in kube-system namespace)
 kubectl create ns sdran 
-helm -n sdran install sd-ran sdran/sd-ran --version 1.2.0
+helm -n sdran install sd-ran sdran/sd-ran --version 1.2.3
 
 # Uninstall sd-ran, atomix and onos-operator
 helm -n sdran uninstall sd-ran
@@ -232,7 +232,7 @@ helm -n kube-system uninstall onos-operator atomix-raft-storage atomix-controlle
 ```
 * Please [contact ONF](https://opennetworking.org/contact/) for username and password credentials that allow access to the sdran helm chart repo
 * When using RiaB, please refer to the [RiaB documentation](https://docs.sd-ran.org/master/sdran-in-a-box/README.html)
-* For hardware setups, please check the [Hardware Installation docs](https://docs.sd-ran.org/master/riab_hw_intro.html)
+* For hardware setups, please check the [Hardware Installation docs](https://docs.sd-ran.org/master/sdran-in-a-box/docs/HW_Installation_intro.html)
 
 ## Documentation
 
