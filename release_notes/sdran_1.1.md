@@ -200,7 +200,7 @@ helm uninstall -n kube-system onos-operator atomix-controller raft-storage-contr
 ```
  * Please [contact ONF](https://opennetworking.org/contact/) for username and password credentials that allow access to the sdran helm chart repo
  * When using RiaB, please refer to the [RiaB documentation](https://docs.sd-ran.org/master/sdran-in-a-box/README.html)
- * For hardware setups, please check the [Hardware Installation docs](https://docs.sd-ran.org/master/riab_hw_intro.html)
+ * For hardware setups, please check the [Hardware Installation docs](https://docs.sd-ran.org/master/sdran-in-a-box/docs/HW_Installation_intro.html)
  
 ## Documentation
 
