@@ -11,6 +11,7 @@ repos
 sdran-in-a-box
 onos-operator
 onos-e2t
+onos-a1t
 onos-e2-sm
 onos-api
 onos-ric-sdk-go

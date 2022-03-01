@@ -35,6 +35,7 @@ can be found on the `ONF Wiki <https://wiki.opennetworking.org/>`_.
    onos-ric-sdk-go/README
    onos-operator/README
    onos-e2t/README
+   onos-a1t/README
    onos-e2-sm/README
    onos-kpimon/README
    onos-pci/README

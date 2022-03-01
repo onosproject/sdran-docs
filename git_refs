@@ -18,6 +18,7 @@ _REPO NAME_             _DIR_    _REF_
 sdran-in-a-box          /        master
 onos-operator           /        master
 onos-e2t                /        master
+onos-a1t                /        master
 onos-e2-sm              /        master
 onos-api                /        master
 onos-ric-sdk-go         /        master
