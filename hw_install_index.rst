@@ -17,5 +17,5 @@ Hardware Installation
    sdran-in-a-box/docs/HW_Installation_oai_enb
    sdran-in-a-box/docs/HW_Installation_oai_ue
    sdran-in-a-box/docs/HW_Installation_ops
-   sdran-in-a-box/docs/HW_Installation_troubleshoot
+   sdran-in-a-box/docs/HW_Installation_troubleshooting
 

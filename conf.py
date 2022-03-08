@@ -51,7 +51,9 @@ warning_is_error = True
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    "sphinx_multiversion",
     'myst_parser',
+    'sphinx.ext.autodoc',
     'sphinx.ext.coverage',
     'sphinx.ext.graphviz',
     'sphinx.ext.ifconfig',
@@ -59,7 +61,6 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.todo',
     'sphinxcontrib.spelling',
-    "sphinx_multiversion",
 ]
 
 # Text files with lists of words that shouldn't fail the spellchecker:
@@ -73,8 +74,9 @@ prep_commands = [
 # inlcude only the branches matching master and sdran-*
 smv_branch_whitelist = r'^(master|sdran-.*)$'
 
-# Suppress tags
-smv_tag_whitelist = None
+# Don't include any tags - smv docs say you can put None here, but that is broken
+# https://github.com/Holzhaus/sphinx-multiversion/issues/47
+smv_tag_whitelist = r'notags'
 
 # include all remote branches
 smv_remote_whitelist = r'^.*$'
@@ -107,10 +109,11 @@ exclude_patterns = [
         '.DS_Store',
         'Thumbs.db',
         '_build',
-        'venv_docs',
+        'venv-docs',
         'requirements.txt',
         'repos',
         '*/CODE_OF_CONDUCT.md',
+        'onos-ric-sdk-py/venv*',
 ]
 
 # The name of the Pygments (syntax highlighting) style to use.
@@ -278,5 +281,4 @@ intersphinx_mapping = {
     }
 
 def setup(app):
-
     app.add_css_file('css/rtd_theme_mods.css')
