@@ -224,20 +224,19 @@ helm install -n kube-system onos-operator onos/onos-operator --version v0.4.6 --
 
 # Install sd-ran (not in kube-system namespace)
 kubectl create ns sdran 
-helm -n sdran install sd-ran sdran/sd-ran --version 1.2.3
+helm -n sdran install sd-ran sdran/sd-ran --version 1.2.4
 
 # Uninstall sd-ran, atomix and onos-operator
 helm -n sdran uninstall sd-ran
 helm -n kube-system uninstall onos-operator atomix-raft-storage atomix-controller
 ```
-* Please [contact ONF](https://opennetworking.org/contact/) for username and password credentials that allow access to the sdran helm chart repo
+
 * When using RiaB, please refer to the [RiaB documentation](https://docs.sd-ran.org/master/sdran-in-a-box/README.html)
 * For hardware setups, please check the [Hardware Installation docs](https://docs.sd-ran.org/master/sdran-in-a-box/docs/HW_Installation_intro.html)
 
 ## Documentation
 
 * All release documentation is available at: [docs.sd-ran.org](http://docs.sd-ran.org)
-* Please [contact ONF](https://opennetworking.org/contact/) for username and password credentials
 
 ## Known Issues
 * Kpm measurement IDs in topo are prefixed with “value:” and it should be removed
