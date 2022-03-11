@@ -15,26 +15,24 @@
 
 _REPO NAME_             _DIR_    _REF_
 
-sdran-in-a-box          /        master
-onos-operator           /        master
-onos-e2t                /        master
-onos-a1t                /        master
-onos-e2-sm              /        master
-onos-api                /        master
-onos-ric-sdk-go         /        master
-onos-kpimon             /        master
-onos-pci                /        master
-onos-config             /        master
-onos-topo               /        master
-onos-uenib              /        master
-onos-cli                /        master
-ran-simulator           /        master
-onos-exporter           /        master
-onos-mlb                /        master
-onos-mho                /        master
-onos-rsm                /        master
-onos-proxy              /        master
-onos-ric-python-apps    /        master
-onos-ric-sdk-py         /        master
-
-
+sdran-in-a-box           /        db4cb5c1731729b0454f68f3caa1476590431aea
+onos-operator            /        97a518b79d9e1f8f06c1459a786163e9b1cb942c
+onos-e2t                 /        1352ae02071b5ab6a6dc99003d6808637db74cf1
+onos-a1t                 /        84bbb70929ab7ad5d02d8c34e59b143d53b47cc9
+onos-e2-sm               /        f7fd56fc6b0e84cf6e98490200a297bada4b3630
+onos-api                 /        04534d647a9a5930357a8dfb5095e31cd12575c1
+onos-ric-sdk-go          /        f12c92866a5a74669db74396da308a02092d3044
+onos-kpimon              /        7e5d9e6d2f88875bd4b7d0aec2e060b97f5d522c
+onos-pci                 /        bd0381e55e0c5928f35cae4bd26ed76eab84753c
+onos-config              /        10bce7cc729a0e17fb6303bf4ea094985948cc46
+onos-topo                /        a9b5d2702dccf99b35efd7619fb60c074ec2093b
+onos-uenib               /        be6a486a85841dd0b5e3bce645c8fd192918ecbf
+onos-cli                 /        ea6a8dabddc28eae0dcdf02642cba1aa02a9f65e
+ran-simulator            /        13451095b3da74c3c2b203b031785d51f6507d0a
+onos-exporter            /        8bfc5f3cecc58279f81418470a6dfec655138dab
+onos-mlb                 /        44c041d408629a6dee7cae03c07ec8868a1dfdbb
+onos-mho                 /        8f6b9424d1367ccdd9ec267d2df4c30310c28a11
+onos-rsm                 /        d83756f9084b718e042b9b99c6a8f287f550caaa
+onos-proxy               /        ddad8daf925bedc0988caa9d28f14dc722659486
+onos-ric-python-apps     /        0be41bb9d76b6d14394840c6c2135144d3640418
+onos-ric-sdk-py          /        56390961e3dc0d94c30a104d8e8c8e7ac3cc09d0
