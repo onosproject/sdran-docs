@@ -225,7 +225,7 @@ kubectl delete ns sdran
 
 | Component | SD-RAN 1.4.0  |
 | :--- | ---: |
-|sd-ran (umbrella chart)| 1.4.0, 1.2.126 (for e2ap101) |
+|sd-ran (umbrella chart)| 1.4.1, 1.2.126 (for e2ap101) |
 | onos-api| v0.9.7 |
 | onos-ric-sdk-go | v0.8.7 |
 | onos-ric-sdk-py | v0.2.3 |
@@ -251,7 +251,7 @@ kubectl delete ns sdran
 | oai/onf du | v0.1.10 chart 0.2.4 |
 | oai ue | v0.1.7 chart 0.1.10 (for nFAPI); sdran-1.1.2 chart 0.1.10 (for USRP hardware) |
 | sdran-in-a box (RiaB) | v1.4.0 |
-| rimedo-ts | v0.0.3 chart 0.0.3 |
+| rimedo-ts | v0.0.5 chart 0.0.5 |
 | fb-ah-gui | 0.0.2 chart 0.0.5 |
 | ah-eson-test-server | 0.0.3 chart 0.0.4 |
 | fb-ah-xapp | v0.0.18 chart 0.0.15 |
