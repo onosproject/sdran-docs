@@ -18,6 +18,7 @@ sdRan-in-a-Box
    sdran-in-a-box/docs/Installation_RANSim_MLB
    sdran-in-a-box/docs/Installation_RANSim_MHO
    sdran-in-a-box/docs/Installation_RANSim_FBAH
+   sdran-in-a-box/docs/Installation_RANSim_RIMDEO_TS
    sdran-in-a-box/docs/Installation_mon_logs
    sdran-in-a-box/docs/Troubleshooting
 
