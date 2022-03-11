@@ -8,20 +8,19 @@
 SHELL = bash -e -o pipefail
 
 # You can set these variables from the command line.
-SPHINXOPTS   ?=
+SPHINXOPTS   ?=   # should be -W but too many warnings
 SPHINXBUILD  ?= sphinx-build
 SOURCEDIR    ?= .
 BUILDDIR     ?= _build
 
 # name of python virtualenv that is used to run commands
-VIRTUALENV   := python3 -m venv
-VENV_NAME    := venv_docs
+VENV_NAME    := venv-docs
 
 # Other repos with documentation to include.
 # edit the `git_refs` file with the commit/tag/branch that you want to use
 OTHER_REPO_DOCS ?=  sdran-in-a-box onos-operator onos-e2t onos-a1t onos-e2-sm onos-api onos-ric-sdk-go onos-kpimon onos-pci onos-config onos-topo onos-uenib onos-cli ran-simulator onos-exporter onos-mlb onos-mho onos-rsm onos-proxy onos-ric-python-apps onos-ric-sdk-py
 
-.PHONY: help test lint doc8 reload Makefile prep
+.PHONY: help Makefile test doc8 dict-check sort-dict license clean clean-all prep
 
 # Put it first so that "make" without argument is like "make help".
 help: $(VENV_NAME)
@@ -30,24 +29,26 @@ help: $(VENV_NAME)
 
 # Create the virtualenv with all the tools installed
 $(VENV_NAME):
-	$(VIRTUALENV) $@ ;\
+	python3 -m venv $@ ;\
   source $@/bin/activate ;\
   pip install -r requirements.txt
 
-# automatically reload changes in browser as they're made
-reload: $(VENV_NAME)
-	source $</bin/activate ; set -u ;\
-  sphinx-reload $(SOURCEDIR)
-
 # lint and link verification. linkcheck is part of sphinx
-test: lint linkcheck spelling
+test: license doc8 dict-check spelling linkcheck
 
-lint: doc8
-
-doc8: $(VENV_NAME) | $(OTHER_REPO_DOCS)
+doc8: $(VENV_NAME) # | $(OTHER_REPO_DOCS) - uncomment once sub-repos pass doc8 lint
 	source $</bin/activate ; set -u ;\
-  doc8 --max-line-length 119 \
-  $$(find . -name \*.rst ! -path "*venv*" ! -path "*vendor*" ! -path "*repos*" )
+  doc8 --ignore-path $< --ignore-path _build --ignore-path LICENSES --ignore-path onos-ric-sdk-py --ignore-path repos --max-line-length 119
+
+# Words in dict.txt must be in the correct alphabetical order and must not duplicated.
+dict-check: sort-dict
+	@set -u ;\
+	git diff --exit-code dict.txt && echo "dict.txt is sorted" && exit 0 || \
+	echo "dict.txt is unsorted or needs to be added to git index" ; exit 1
+
+sort-dict:
+	@sort -u < dict.txt > dict_sorted.txt
+	@mv dict_sorted.txt dict.txt
 
 license: $(VENV_NAME)
 	source $</bin/activate ; set -u ;\

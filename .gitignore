@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-venv_docs
+venv-docs
 _build
 repos
 .DS_Store
