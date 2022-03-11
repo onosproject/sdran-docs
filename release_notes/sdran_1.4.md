@@ -187,7 +187,7 @@ A helpful listing of the use-cases, xApps, SMs and their support in this release
 
 ## Deployment
   * Sdran-helm-charts (prerequisites: a running kubernetes cluster, kubectl and helm installed)
-  * Note that the SD-RAN umbrella chart version used below (v1.4.0) in the helm install command corresponds to a version of E2T microservice that uses O-RAN E2AP v2.0. For use of E2AP v1.01, use a different umbrella chart (v1.2.126). The two E2AP versions cannot be used at the same time.
+  * Note that the SD-RAN umbrella chart version used below (v1.4.2) in the helm install command corresponds to a version of E2T microservice that uses O-RAN E2AP v2.0. For use of E2AP v1.01, use a different umbrella chart (v1.2.126). The two E2AP versions cannot be used at the same time.
 ```bash
 # Add helm repositories
 helm repo add cord https://charts.opencord.org
@@ -203,7 +203,7 @@ helm install onos-operator onos/onos-operator -n kube-system --wait --version 0.
 
 # Install sd-ran (not in kube-system namespace)
 kubectl create ns sdran 
-helm -n sdran install sd-ran sdran/sd-ran --version 1.4.0
+helm -n sdran install sd-ran sdran/sd-ran --version 1.4.2
 
 # Uninstall sd-ran, atomix and onos-operator
 helm -n sdran uninstall sd-ran
@@ -225,7 +225,7 @@ kubectl delete ns sdran
 
 | Component | SD-RAN 1.4.0  |
 | :--- | ---: |
-|sd-ran (umbrella chart)| 1.4.1, 1.2.126 (for e2ap101) |
+|sd-ran (umbrella chart)| 1.4.2, 1.2.126 (for e2ap101) |
 | onos-api| v0.9.7 |
 | onos-ric-sdk-go | v0.8.7 |
 | onos-ric-sdk-py | v0.2.3 |
