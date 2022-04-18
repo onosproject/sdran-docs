@@ -186,8 +186,9 @@ A helpful listing of the use-cases, xApps, SMs and their support in this release
   * Added new unit tests for onos-config  
 
 ## Deployment
-  * Sdran-helm-charts (prerequisites: a running kubernetes cluster, kubectl and helm installed)
+  * sdran-helm-charts (prerequisites: a running kubernetes cluster, kubectl and helm installed)
   * Note that the SD-RAN umbrella chart version used below (v1.4.2) in the helm install command corresponds to a version of E2T microservice that uses O-RAN E2AP v2.0. For use of E2AP v1.01, use a different umbrella chart (v1.2.126). The two E2AP versions cannot be used at the same time.
+  * NOTE for 1.4.1 release, use SD-RAN umbrella chart version 1.4.5 (appversion 1.4.1)
 ```bash
 # Add helm repositories
 helm repo add cord https://charts.opencord.org
@@ -221,40 +222,52 @@ kubectl delete ns sdran
 ## Known Issues
   * xApp A1 policy consistent problem: a new A1-enabled xApp should not be added if there are already A1 policies added. If it happens, the new xApp is unable to get the old A1 policies already added. The new xApp only has the A1 policies which are pushed after the xApp is deployed.
 
+## Release 1.4.1. Change Notes
+
+
+
+
+* Use uint16 for request ID to fix out of range encoding issue
+* Fix concurrency access on response channels map for E2 control API
+* Cache Nodes in E2 SDK  to prevent resource leaks when calling Node() function
+* Handle empty indication message on a NB closed channel in onos-e2t.
+* Fixed a problem with the `plmnID` value on the `model-7cell-140ue.yaml` model in `ran-simulator`
+* Updated the `onos-sdk` dependency in `onos-e2t` and `onos-cli`
+* Updated the `onos-sdk` dependency in these xApps: `onos-kpimon`, `onos-pci`, `onos-mlb`, `onos-rsm`, and `onos-mho`
 ## Component Versions
 
-| Component | SD-RAN 1.4.0  |
-| :--- | ---: |
-|sd-ran (umbrella chart)| 1.4.2, 1.2.126 (for e2ap101) |
-| onos-api| v0.9.7 |
-| onos-ric-sdk-go | v0.8.7 |
-| onos-ric-sdk-py | v0.2.3 |
-| onos-proxy | v0.1.2 |
-| onos-lib-go | v0.8.13 |
-| onos-e2-sm | v0.8.7 |
-| onos-e2t | v0.10.11 chart 1.3.10,  v0.8.13 chart 1.1.12 (for e2ap101) |
-| onos-uenib | v0.2.5 chart 1.2.2 |
-| onos-topo | v0.9.4 chart 1.2.3 |
-| onos-config | v0.10.28 chart 1.6.12 |
-| onos-operator | v0.5.0 chart 0.5.2 |
-| ran-simulator | v0.9.6 chart 1.3.9 |
-| onos-cli | v0.9.11 chart 1.2.7 |
-| onos-kpimon | v0.3.5 chart 0.8.5 |
-| onos-pci | v0.3.5 chart 0.8.5 |
-| onos-mlb | v0.2.2 chart 0.2.3 |
-| onos-exporter | v0.2.0 chart 0.4.3 |
-| onos-rsm | v0.1.13 chart 0.1.8 |
-| onos-mho | v0.2.5 chart 0.2.4 |
-| onos-a1t | v0.1.11 chart 0.1.5 |
-| onos-a1-dm | 0.0.5 |
-| oai/onf cu | v0.1.10 chart 0.2.4 |
-| oai/onf du | v0.1.10 chart 0.2.4 |
-| oai ue | v0.1.7 chart 0.1.10 (for nFAPI); sdran-1.1.2 chart 0.1.10 (for USRP hardware) |
-| sdran-in-a box (RiaB) | v1.4.0 |
-| rimedo-ts | v0.0.5 chart 0.0.5 |
-| fb-ah-gui | 0.0.2 chart 0.0.5 |
-| ah-eson-test-server | 0.0.3 chart 0.0.4 |
-| fb-ah-xapp | v0.0.18 chart 0.0.15 |
-| fb-kpimon-xapp | v0.0.19 chart 0.0.7 |
-| atomix/atomix-controller | v0.6.2 chart 0.6.9 |
-| atomix/atomix-raft-storage | v0.9.19 chart 0.1.25 |
+| Component                  | SD-RAN 1.4.0                                                                  |          SD-RAN 1.4.1 |
+|:---------------------------|-------------------------------------------------------------------------------|----------------------:|
+| sd-ran (umbrella chart)    | 1.4.2, 1.2.126 (for e2ap101)                                                  |                 1.4.5 |
+| onos-api                   | v0.9.7                                                                        |
+| onos-ric-sdk-go            | v0.8.8                                                                        |
+| onos-ric-sdk-py            | v0.2.3                                                                        |
+| onos-proxy                 | v0.1.2                                                                        |
+| onos-lib-go                | v0.8.13                                                                       |
+| onos-e2-sm                 | v0.8.7                                                                        |
+| onos-e2t                   | v0.10.11 chart 1.3.10,  v0.8.13 chart 1.1.12 (for e2ap101)                    | v0.10.13 chart 1.3.11 |
+| onos-uenib                 | v0.2.5 chart 1.2.2                                                            |
+| onos-topo                  | v0.9.4 chart 1.2.3                                                            |
+| onos-config                | v0.10.28 chart 1.6.12                                                         |
+| onos-operator              | v0.5.0 chart 0.5.2                                                            |
+| ran-simulator              | v0.9.6 chart 1.3.9                                                            |   v0.9.6 chart 1.3.11 |
+| onos-cli                   | v0.9.11 chart 1.2.8                                                           |
+| onos-kpimon                | v0.3.5 chart 0.8.5                                                            |    v0.4.0 chart 0.8.6 |
+| onos-pci                   | v0.3.5 chart 0.8.5                                                            |    v0.4.0 chart 0.8.6 |
+| onos-mlb                   | v0.2.2 chart 0.2.3                                                            |    v0.3.0 chart 0.2.4 |
+| onos-exporter              | v0.2.0 chart 0.4.3                                                            |
+| onos-rsm                   | v0.1.13 chart 0.1.8                                                           |    v0.2.0 chart 0.1.9 |
+| onos-mho                   | v0.2.5 chart 0.2.4                                                            |    v0.3.0 chart 0.2.5 |
+| onos-a1t                   | v0.1.11 chart 0.1.5                                                           |
+| onos-a1-dm                 | 0.0.5                                                                         |
+| oai/onf cu                 | v0.1.10 chart 0.2.4                                                           |
+| oai/onf du                 | v0.1.10 chart 0.2.4                                                           |
+| oai ue                     | v0.1.7 chart 0.1.10 (for nFAPI); sdran-1.1.2 chart 0.1.10 (for USRP hardware) |
+| sdran-in-a box (RiaB)      | v1.4.0                                                                        |
+| rimedo-ts                  | v0.0.5 chart 0.0.5                                                            |
+| fb-ah-gui                  | 0.0.2 chart 0.0.5                                                             |
+| ah-eson-test-server        | 0.0.3 chart 0.0.4                                                             |
+| fb-ah-xapp                 | v0.0.18 chart 0.0.15                                                          |
+| fb-kpimon-xapp             | v0.0.19 chart 0.0.7                                                           |
+| atomix/atomix-controller   | v0.6.2 chart 0.6.9                                                            |
+| atomix/atomix-raft-storage | v0.9.19 chart 0.1.25                                                          |
