@@ -245,30 +245,30 @@ helm -n kube-system uninstall onos-operator atomix-raft-storage atomix-controlle
 
 ## Component Versions
 
-| Component | SD-RAN 1.2.0  |
-| :--- | ---: |
-| sd-ran (umbrella chart) | v1.2.0 chart 1.2.0 |
-| onos-api | v0.7.80 |
-| onos-ric-sdk-go | v0.7.22 |
-| onos-lib-go | v0.7.13 |
-| onos-e2-sm | v0.7.51 |
-| onos-e2t | v0.7.38 chart 1.0.46 | 
-| onos-uenib | v0.1.0 chart 1.0.5 |
-| onos-topo | v0.7.10 chart 1.0.16 | 
-| onos-config | v0.8.4 chart 1.2.3 |
-| onos-operator | v0.4.5 chart 0.4.6 |
-| ran-simulator (RANSim) | v0.7.56 chart 1.0.74 |
-| onos-cli | v0.7.33 chart 1.0.27 |
-| onos-kpimon | v0.1.26 chart 0.6.19 |
-| onos-pci | v0.1.19 chart 0.6.18 |
-| onos-mlb | v0.0.7 chart 0.0.5 |
-| onos-exporter | v0.1.7 chart 0.2.5 |
-| cu-cp | v0.1.6 chart 0.1.8 |
-| oai du | v0.1.6 chart 0.1.8 |
-| oai ue | v0.1.6 chart 0.1.8 (for nFAPI); sdran-1.1.2 chart 0.1.8 (for USRP hardware)|
-| sdran-in-a-box (RiaB) | 1.2.0 |
-| fb-ah-gui | 0.0.2 chart 0.0.4 |
-| ah-eson-test-server | 0.0.2 chart 0.0.2 |
-| fb-ah-xapp | 0.0.4 chart 0.0.5 |
-| fb-kpimon-xapp | 0.0.2 chart 0.0.3 |
-| atomix | v3.1.9 chart 0.1.5|
+| Component               | SD-RAN 1.2.0                                                                |        SD-RAN 1.2.1 |
+|:------------------------|-----------------------------------------------------------------------------|--------------------:|
+| sd-ran (umbrella chart) | v1.2.0 chart 1.2.0                                                          |  v1.2.4 chart 1.2.4 |
+| onos-api                | v0.7.80                                                                     |
+| onos-ric-sdk-go         | v0.7.22                                                                     |
+| onos-lib-go             | v0.7.13                                                                     |
+| onos-e2-sm              | v0.7.51                                                                     |             v0.7.53 |
+| onos-e2t                | v0.7.38 chart 1.0.46                                                        | v0.8.1 chart 1.0.47 |
+| onos-uenib              | v0.1.0 chart 1.0.5                                                          |
+| onos-topo               | v0.7.10 chart 1.0.16                                                        | 
+| onos-config             | v0.8.4 chart 1.2.3                                                          |
+| onos-operator           | v0.4.5 chart 0.4.6                                                          |
+| ran-simulator (RANSim)  | v0.7.56 chart 1.0.74                                                        |
+| onos-cli                | v0.7.33 chart 1.0.27                                                        |
+| onos-kpimon             | v0.1.26 chart 0.6.19                                                        |
+| onos-pci                | v0.1.19 chart 0.6.18                                                        |
+| onos-mlb                | v0.0.7 chart 0.0.5                                                          |
+| onos-exporter           | v0.1.7 chart 0.2.5                                                          |
+| cu-cp                   | v0.1.6 chart 0.1.8                                                          |
+| oai du                  | v0.1.6 chart 0.1.7                                                          |
+| oai ue                  | v0.1.6 chart 0.1.7 (for nFAPI); sdran-1.1.2 chart 0.1.8 (for USRP hardware) |
+| sdran-in-a-box (RiaB)   | 1.2.0                                                                       |
+| fb-ah-gui               | 0.0.2 chart 0.0.4                                                           |
+| ah-eson-test-server     | 0.0.2 chart 0.0.2                                                           |
+| fb-ah-xapp              | 0.0.4 chart 0.0.5                                                           |
+| fb-kpimon-xapp          | 0.0.2 chart 0.0.3                                                           |
+| atomix                  | v3.1.9 chart 0.1.5                                                          |
