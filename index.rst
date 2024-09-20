@@ -49,6 +49,8 @@ can be found on the `ONF Wiki <https://wiki.opennetworking.org/>`_.
    onos-mho/README
    onos-rsm/README
    ran-simulator/README
+   onos-ric-sdk-py/README
+   onos-ric-python-apps/README
    oai_cu_cp
 
 .. toctree::
