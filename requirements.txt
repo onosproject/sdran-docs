@@ -3,7 +3,7 @@
 
 Sphinx~=8.1
 doc8~=1.1.2
-docutils~=0.17.1
+docutils~=0.20.2
 reuse~=4.0.3
 sphinx-rtd-theme~=3.0.1
 sphinxcontrib-spelling~=8.0.0
