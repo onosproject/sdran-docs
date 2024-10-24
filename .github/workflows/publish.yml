@@ -6,7 +6,7 @@ name: Publish Docs Workflow
 on:
   push:
     branches:
-      - main
+      - master
   workflow_dispatch:
 
 
@@ -33,7 +33,7 @@ jobs:
           else
             echo "$files"
           fi
-          
+
   # NOTE: Action to tag repo, publish images/documents only enabled for "onosproject"
   # CAUTION: Other actions depend on this name "tag-github"
   tag-github:
@@ -119,7 +119,7 @@ jobs:
             Update VERSION file
           add-paths: |
             VERSION
-            
+
   publish:
     runs-on: ubuntu-latest
     if: github.repository_owner == 'onosproject'
@@ -144,7 +144,7 @@ jobs:
         with:
           switches: -rvzh --delete-after --exclude=.git
           path: $BUILD_OUTPUT_PATH
-          remote_path: /srv/sites/docs.sd-core.opennetworking.org/
+          remote_path: /srv/sites/docs.sd-ran.org/
           remote_host: static.opennetworking.org
           remote_user: ${{ secrets.JENKINS_USERNAME }}
           remote_key: ${{ secrets.JENKINS_SSHKEY }}
