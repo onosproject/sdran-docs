@@ -70,7 +70,7 @@ repos:
 CHECKOUT_REPOS   = $(foreach repo,$(OTHER_REPO_DOCS),repos/$(repo))
 
 # Host holding the git server
-REPO_HOST       ?= git@github.com:onosproject
+REPO_HOST       ?= https://github.com/onosproject
 
 # For QA patchset validation - set SKIP_CHECKOUT to the repo name and
 # pre-populate it under repos/ with the specific commit to being validated
