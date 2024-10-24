@@ -8,5 +8,4 @@ reuse~=4.0.3
 sphinx-rtd-theme~=3.0.1
 sphinxcontrib-spelling~=8.0.0
 sphinx-multiversion~=0.2.4
-git+https://github.com/zdw/sphinx-multiversion@ec7c01cdaf2f9241245e84483dfb9bc0d0dffc62
 myst-parser~=0.17.0
