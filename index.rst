@@ -31,24 +31,24 @@ can be found on the `ONF Wiki <https://wiki.opennetworking.org/>`_.
    :hidden:
    :caption: Components
 
-   onos-api/README
-   onos-ric-sdk-go/README
-   onos-operator/README
-   onos-e2t/README
-   onos-a1t/README
-   onos-e2-sm/README
-   onos-kpimon/README
-   onos-pci/README
-   onos-config/README
-   onos-topo/README
-   onos-uenib/README
-   onos-proxy/README
-   onos-cli/README
-   onos-exporter/README
-   onos-mlb/README
-   onos-mho/README
-   onos-rsm/README
-   ran-simulator/README
+   repos/onos-api/README
+   repos/onos-ric-sdk-go/README
+   repos/onos-operator/README
+   repos/onos-e2t/README
+   repos/onos-a1t/README
+   repos/onos-e2-sm/README
+   repos/onos-kpimon/README
+   repos/onos-pci/README
+   repos/onos-config/README
+   repos/onos-topo/README
+   repos/onos-uenib/README
+   repos/onos-proxy/README
+   repos/onos-cli/README
+   repos/onos-exporter/README
+   repos/onos-mlb/README
+   repos/onos-mho/README
+   repos/onos-rsm/README
+   repos/ran-simulator/README
    oai_cu_cp
 
 .. toctree::
