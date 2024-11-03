@@ -134,7 +134,7 @@ jobs:
           python-version: 3.11
 
       - name: Build docs
-        run: ls -al; make multiversion
+        run: make multiversion; ls -al
 
       - name: List built files
         run: ls $BUILD_OUTPUT_PATH*
