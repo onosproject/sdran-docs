@@ -80,6 +80,8 @@ SKIP_CHECKOUT   ?=
 $(CHECKOUT_REPOS): | repos
 	if [ ! -d '$@' ] ;\
     then git clone $(REPO_HOST)/$(@F) $@ ;\
+    pwd ;\
+    ls -al ;\
   fi
 
 # checkout correct ref if not under test, then copy subdirectories into main
