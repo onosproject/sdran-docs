@@ -64,7 +64,7 @@ clean-all: clean
 
 # checkout the repos inside repos/ dir
 repos:
-	mkdir repos
+	mkdir /tmp/repos
 
 # build directory paths in repos/* to perform 'git clone <repo>' into
 CHECKOUT_REPOS   = $(foreach repo,$(OTHER_REPO_DOCS),repos/$(repo))
@@ -80,8 +80,6 @@ SKIP_CHECKOUT   ?=
 $(CHECKOUT_REPOS): | repos
 	if [ ! -d '$@' ] ;\
     then git clone $(REPO_HOST)/$(@F) $@ ;\
-    pwd ;\
-    ls -al ;\
   fi
 
 # checkout correct ref if not under test, then copy subdirectories into main

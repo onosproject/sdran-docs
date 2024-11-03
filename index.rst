@@ -31,24 +31,24 @@ can be found on the `ONF Wiki <https://wiki.opennetworking.org/>`_.
    :hidden:
    :caption: Components
 
-   ./repos/onos-api/README
-   ./repos/onos-ric-sdk-go/README
-   ./repos/onos-operator/README
-   ./repos/onos-e2t/README
-   ./repos/onos-a1t/README
-   ./repos/onos-e2-sm/README
-   ./repos/onos-kpimon/README
-   ./repos/onos-pci/README
-   ./repos/onos-config/README
-   ./repos/onos-topo/README
-   ./repos/onos-uenib/README
-   ./repos/onos-proxy/README
-   ./repos/onos-cli/README
-   ./repos/onos-exporter/README
-   ./repos/onos-mlb/README
-   ./repos/onos-mho/README
-   ./repos/onos-rsm/README
-   ./repos/ran-simulator/README
+   /tmp/repos/onos-api/README
+   /tmp/repos/onos-ric-sdk-go/README
+   /tmp/repos/onos-operator/README
+   /tmp/repos/onos-e2t/README
+   /tmp/repos/onos-a1t/README
+   /tmp/repos/onos-e2-sm/README
+   /tmp/repos/onos-kpimon/README
+   /tmp/repos/onos-pci/README
+   /tmp/repos/onos-config/README
+   /tmp/repos/onos-topo/README
+   /tmp/repos/onos-uenib/README
+   /tmp/repos/onos-proxy/README
+   /tmp/repos/onos-cli/README
+   /tmp/repos/onos-exporter/README
+   /tmp/repos/onos-mlb/README
+   /tmp/repos/onos-mho/README
+   /tmp/repos/onos-rsm/README
+   /tmp/repos/ran-simulator/README
    oai_cu_cp
 
 .. toctree::
