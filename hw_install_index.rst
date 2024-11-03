@@ -10,12 +10,12 @@ Hardware Installation
    :hidden:
    :caption: Hardware Installation
 
-   ./sdran-in-a-box/docs/HW_Installation_intro
-   ./sdran-in-a-box/docs/HW_Installation_prereq
-   ./sdran-in-a-box/docs/HW_Installation_omec
-   ./sdran-in-a-box/docs/HW_Installation_ric
-   ./sdran-in-a-box/docs/HW_Installation_oai_enb
-   ./sdran-in-a-box/docs/HW_Installation_oai_ue
-   ./sdran-in-a-box/docs/HW_Installation_ops
-   ./sdran-in-a-box/docs/HW_Installation_troubleshooting
+   ./repo/sdran-in-a-box/docs/HW_Installation_intro
+   ./repo/sdran-in-a-box/docs/HW_Installation_prereq
+   ./repo/sdran-in-a-box/docs/HW_Installation_omec
+   ./repo/sdran-in-a-box/docs/HW_Installation_ric
+   ./repo/sdran-in-a-box/docs/HW_Installation_oai_enb
+   ./repo/sdran-in-a-box/docs/HW_Installation_oai_ue
+   ./repo/sdran-in-a-box/docs/HW_Installation_ops
+   ./repo/sdran-in-a-box/docs/HW_Installation_troubleshooting
 
