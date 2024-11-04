@@ -107,6 +107,7 @@ prep: | $(OTHER_REPO_DOCS)
 
 # build multiple versions
 multiversion: $(VENV_NAME) Makefile | prep $(OTHER_REPO_DOCS)
+	ls $(SOURCEDIR) ;\
 	source $</bin/activate ; set -u ;\
   sphinx-multiversion "$(SOURCEDIR)" "$(BUILDDIR)/multiversion" $(SPHINXOPTS)
 	cp "$(SOURCEDIR)/_templates/meta_refresh.html" "$(BUILDDIR)/multiversion/index.html"
