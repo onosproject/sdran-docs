@@ -67,7 +67,7 @@ repos:
 	mkdir $(SOURCEDIR)/repos
 
 # build directory paths in repos/* to perform 'git clone <repo>' into
-CHECKOUT_REPOS   = $(foreach repo,$(OTHER_REPO_DOCS),repos/$(repo))
+CHECKOUT_REPOS   = $(foreach repo,$(OTHER_REPO_DOCS),$(repo))
 
 # Host holding the git server
 REPO_HOST       ?= https://github.com/onosproject
@@ -87,16 +87,16 @@ $(CHECKOUT_REPOS): | repos
 $(OTHER_REPO_DOCS): | $(CHECKOUT_REPOS)
 	if [ "$(SKIP_CHECKOUT)" != "$@" ] ;\
     then GIT_REF=`grep '^$@ ' git_refs | awk '{print $$3}'` ;\
-    cd "repos/$@" && git fetch && git checkout $$GIT_REF ;\
+    cd "$@" && git fetch && git checkout $$GIT_REF ;\
   fi
 	GIT_SUBDIR=`grep '^$@ ' git_refs | awk '{print $$2}'` ;\
-  cp -r repos/$(@)$$GIT_SUBDIR $@ ;\
+  cp -r $(@)$$GIT_SUBDIR $@ ;\
 
 # generate a list of git checksums suitable for updating git_refs
 freeze: repos
 	@for repo in $(OTHER_REPO_DOCS) ; do \
   GIT_SUBDIR=`grep "^$$repo " git_refs | awk '{print $$2}'` ;\
-    cd "repos/$$repo" > /dev/null ;\
+    cd "$$repo" > /dev/null ;\
     HEAD_SHA=`git rev-parse HEAD` ;\
     printf "%-24s %-8s %-40s\n" $$repo $$GIT_SUBDIR $$HEAD_SHA ;\
   cd ../.. ;\
