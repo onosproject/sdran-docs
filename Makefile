@@ -64,7 +64,7 @@ clean-all: clean
 
 # checkout the repos inside repos/ dir
 repos:
-	mkdir /tmp/repos
+	mkdir $(SOURCEDIR)/repos
 
 # build directory paths in repos/* to perform 'git clone <repo>' into
 CHECKOUT_REPOS   = $(foreach repo,$(OTHER_REPO_DOCS),repos/$(repo))
@@ -78,9 +78,11 @@ SKIP_CHECKOUT   ?=
 
 # clone (only if doesn't exist)
 $(CHECKOUT_REPOS): | repos
+	pushd $(SOURCEDIR) ;\
 	if [ ! -d '$@' ] ;\
     then git clone $(REPO_HOST)/$(@F) $@ ;\
-  fi
+  	fi ;\
+  	popd
 
 # checkout correct ref if not under test, then copy subdirectories into main
 # docs dir
@@ -107,9 +109,10 @@ prep: | $(OTHER_REPO_DOCS)
 
 # build multiple versions
 multiversion: $(VENV_NAME) Makefile | prep $(OTHER_REPO_DOCS)
+	echo $(SOURCEDIR); \
 	ls $(SOURCEDIR) ;\
 	source $</bin/activate ; set -u ;\
-  sphinx-multiversion "$(SOURCEDIR)" "$(BUILDDIR)/multiversion" $(SPHINXOPTS)
+	sphinx-multiversion "$(SOURCEDIR)" "$(BUILDDIR)/multiversion" $(SPHINXOPTS)
 	cp "$(SOURCEDIR)/_templates/meta_refresh.html" "$(BUILDDIR)/multiversion/index.html"
 
 # Catch-all target: route all unknown targets to Sphinx using the new
