@@ -8,9 +8,9 @@
 SHELL = bash -e -o pipefail
 
 # You can set these variables from the command line.
-SPHINXOPTS   ?=   # should be -W but too many warnings
+SPHINXOPTS   ?= -W   # should be -W but too many warnings
 SPHINXBUILD  ?= sphinx-build
-SOURCEDIR    ?= .
+SOURCEDIR    ?= $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 BUILDDIR     ?= _build
 
 # name of python virtualenv that is used to run commands
