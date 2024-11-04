@@ -31,24 +31,24 @@ can be found on the `ONF Wiki <https://wiki.opennetworking.org/>`_.
    :hidden:
    :caption: Components
 
-   /tmp/repos/onos-api/README
-   /tmp/repos/onos-ric-sdk-go/README
-   /tmp/repos/onos-operator/README
-   /tmp/repos/onos-e2t/README
-   /tmp/repos/onos-a1t/README
-   /tmp/repos/onos-e2-sm/README
-   /tmp/repos/onos-kpimon/README
-   /tmp/repos/onos-pci/README
-   /tmp/repos/onos-config/README
-   /tmp/repos/onos-topo/README
-   /tmp/repos/onos-uenib/README
-   /tmp/repos/onos-proxy/README
-   /tmp/repos/onos-cli/README
-   /tmp/repos/onos-exporter/README
-   /tmp/repos/onos-mlb/README
-   /tmp/repos/onos-mho/README
-   /tmp/repos/onos-rsm/README
-   /tmp/repos/ran-simulator/README
+   onos-api/README
+   onos-ric-sdk-go/README
+   onos-operator/README
+   onos-e2t/README
+   onos-a1t/README
+   onos-e2-sm/README
+   onos-kpimon/README
+   onos-pci/README
+   onos-config/README
+   onos-topo/README
+   onos-uenib/README
+   onos-proxy/README
+   onos-cli/README
+   onos-exporter/README
+   onos-mlb/README
+   onos-mho/README
+   onos-rsm/README
+   ran-simulator/README
    oai_cu_cp
 
 .. toctree::

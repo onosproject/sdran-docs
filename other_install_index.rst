@@ -10,6 +10,6 @@ Other Installations
    :hidden:
    :caption: Other Installations
 
-   /tmp/repo/sdran-in-a-box/docs/HW_Installation_ric_only
-   /tmp/repo/sdran-in-a-box/docs/HW_Installation_oai_source
+   sdran-in-a-box/docs/HW_Installation_ric_only
+   sdran-in-a-box/docs/HW_Installation_oai_source
 

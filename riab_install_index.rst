@@ -10,15 +10,15 @@ sdRan-in-a-Box
    :hidden:
    :caption: sdRan-in-a-Box
 
-   /tmp/repo/sdran-in-a-box/README
-   /tmp/repo/sdran-in-a-box/docs/RiaB_Prerequisites
-   /tmp/repo/sdran-in-a-box/docs/Configuration_files
-   /tmp/repo/sdran-in-a-box/docs/Installation_OAI_nFAPI
-   /tmp/repo/sdran-in-a-box/docs/Installation_RANSim_PCI
-   /tmp/repo/sdran-in-a-box/docs/Installation_RANSim_MLB
-   /tmp/repo/sdran-in-a-box/docs/Installation_RANSim_MHO
-   /tmp/repo/sdran-in-a-box/docs/Installation_RANSim_FBAH
-   /tmp/repo/sdran-in-a-box/docs/Installation_RANSim_RIMDEO_TS
-   /tmp/repo/sdran-in-a-box/docs/Installation_mon_logs
-   /tmp/repo/sdran-in-a-box/docs/Troubleshooting
+   sdran-in-a-box/README
+   sdran-in-a-box/docs/RiaB_Prerequisites
+   sdran-in-a-box/docs/Configuration_files
+   sdran-in-a-box/docs/Installation_OAI_nFAPI
+   sdran-in-a-box/docs/Installation_RANSim_PCI
+   sdran-in-a-box/docs/Installation_RANSim_MLB
+   sdran-in-a-box/docs/Installation_RANSim_MHO
+   sdran-in-a-box/docs/Installation_RANSim_FBAH
+   sdran-in-a-box/docs/Installation_RANSim_RIMDEO_TS
+   sdran-in-a-box/docs/Installation_mon_logs
+   sdran-in-a-box/docs/Troubleshooting
 
