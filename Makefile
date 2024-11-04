@@ -78,11 +78,9 @@ SKIP_CHECKOUT   ?=
 
 # clone (only if doesn't exist)
 $(CHECKOUT_REPOS): | repos
-	pushd $(SOURCEDIR) ;\
 	if [ ! -d '$@' ] ;\
-    then git clone $(REPO_HOST)/$(@F) $@ ;\
-  	fi ;\
-  	popd
+    then git clone $(@F) $@ ;\
+  fi
 
 # checkout correct ref if not under test, then copy subdirectories into main
 # docs dir
