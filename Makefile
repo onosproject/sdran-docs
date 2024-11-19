@@ -90,7 +90,9 @@ $(OTHER_REPO_DOCS): | $(CHECKOUT_REPOS)
     cd "repos/$@" && git fetch && git checkout $$GIT_REF ;\
   fi
 	GIT_SUBDIR=`grep '^$@ ' git_refs | awk '{print $$2}'` ;\
-  cp -r repos/$(@)$$GIT_SUBDIR $@ ;\
+  mkdir -p $(@) ;\
+  cp repos/$(@)$$GIT_SUBDIR./README.md $@/ ;\
+  cp -r repos/$(@)$$GIT_SUBDIR./docs $@/ || true ;\
 
 # generate a list of git checksums suitable for updating git_refs
 freeze: repos
