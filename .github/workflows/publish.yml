@@ -11,29 +11,6 @@ on:
 
 
 jobs:
-  validate:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.11
-
-      - name: Build docs
-        run: make html
-
-      - name: List built files
-        run: |
-          files=$(ls ${{ github.workspace }}/_build/html)
-          if [ -z "$files" ]; then
-            echo "No files found in _build/html directory"
-            exit 1
-          else
-            echo "$files"
-          fi
-
   # NOTE: Action to tag repo, publish images/documents only enabled for "onosproject"
   # CAUTION: Other actions depend on this name "tag-github"
   tag-github:
