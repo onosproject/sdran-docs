@@ -6,10 +6,10 @@ name: Main workflow
 on:
   pull_request:
     branches:
-      - main
+      - master
   push:
     branches:
-      - main
+      - master
 
 jobs:
   doc8:
@@ -49,19 +49,7 @@ jobs:
       - run: make linkcheck
 
   license-check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: reuse lint
-        uses: fsfe/reuse-action@v4
+    uses: onosproject/.github/.github/workflows/license-check.yml@main
 
   fossa-check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: FOSSA scan
-        uses: fossa-contrib/fossa-action@v3
-        with:
-          fossa-api-key: 0c3bbcdf20e157bbd487dae173751b28
+    uses: onosproject/.github/.github/workflows/fossa-scan.yml@main
