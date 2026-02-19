@@ -32,6 +32,12 @@ jobs:
         uses: actions/configure-pages@v4
       - name: Build html
         run: make html
+      - name: Verify build output
+        run: |
+          ls -al
+          ls -al _build || true
+          ls -al _build/html || true
+          test -f _build/html/index.html && echo "index.html OK" || (echo "index.html MISSING" && exit 1)
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
