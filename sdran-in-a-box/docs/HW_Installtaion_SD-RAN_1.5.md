@@ -4,7 +4,7 @@
 
 # 1. Overall Connectivity
 
-![SD-RAN Hardware Scenario](./SD-RAN%20Hardware%20Setting.png)
+![SD-RAN Hardware Scenario](./figures/SD-RAN_Hardware_Setting.png)
 
 For the SD-RAN hardware scenario, we should have two servers (NUCs), one USRP, and one UE. The above figure shows the overall connectivity for the scenario. Each NUC has an IP address and they are connected with a L3 router with NAT functionality. In this document, we are assuming that the NUC for OAI CU/DU has a machine IP address 192.168.1.107. The CU and DU have the logical IP addresses 192.168.1.107 and 192.168.1.109, respectively. The NUC for RIC/Core Network (CN) has a machine IP address 192.168.1.108. The NUC for OAI is connected with the USRP B210 device with USB 3.0 cable.
 
