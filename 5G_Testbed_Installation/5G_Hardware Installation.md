@@ -190,8 +190,8 @@ If there is no error message, OAI 5G RAN build is successfully done.
 And then, run the below commands to add some routing rules and disable TX/RX checksum and GRO:
 ```bash
 $ sudo ethtool -K eno1 tx off rx off gro off gso off
-$ sudo route add -net 192.168.250.0/24 gw 192.168.1.108 dev eno1
-$ sudo route add -net 192.168.252.0/24 gw 192.168.1.108 dev eno1
+$ sudo route add -net 192.168.250.0/24 gw 192.168.1.112 dev eno1
+$ sudo route add -net 192.168.252.0/24 gw 192.168.1.112 dev eno1
 ```
 
 After that, we should prepare 5G RAN configuration files. **Appendix B** has a RAN configuration file, copy those files to the NUC for the OAI 5G RAN.
@@ -405,7 +405,7 @@ omec-sub-provision:
               ip-domain-name: "pool1"
               ip-domains:
                 - dnn: internet
-                  dns-primary: "163.180.96.54"        # Value is sent to UE
+                  dns-primary: "8.8.8.8"        # Value is sent to UE
                   mtu: 1460                     # Value is sent to UE when PDU Session Established
                   ue-ip-pool: {{ core.upf.default_upf.ue_ip_pool }}  # IP address pool for subscribers
                   ue-dnn-qos:
